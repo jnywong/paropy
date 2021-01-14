@@ -15,5 +15,5 @@ setup(name='parody_py',
       author_email='jenny.wong@univ-grenoble-alpes.fr',
       license='MIT',
       packages=['paropy'],
-      install_requires=['pytest'],
+      install_requires=['pytest','cartopy'],
       )

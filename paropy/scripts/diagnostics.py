@@ -15,20 +15,18 @@ Loads diagnostic outputs from PARODY-JA4.3:
     - inner core and mantle rotation and torques (if Coupled Earth run)
 
 """
-
-import os
 import pandas as pd
 
-from parody_py.data_utils import load_kinetic,load_magnetic,load_nusselt, \
+from paropy.data_utils import load_kinetic,load_magnetic,load_nusselt, \
 load_dipole,load_power,load_scales,load_spec_l,load_spec_m, load_mantle, \
 load_innercore
-from parody_py.routines import sim_time, grav_torque
+from paropy.routines import sim_time, grav_torque
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'd_0_8a' # PARODY simulation tag
-directory = '{}/Desktop/froggy/Work/{}/'.format(os.path.expanduser('~'),run_ID) # path containing simulation output
+run_ID = 'c-200a' # PARODY simulation tag
+directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID) # path containing simulation output
 
 #%%----------------------------------------------------------------------------
 # Load data

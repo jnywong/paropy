@@ -17,8 +17,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 
-from parody_py.data_utils import surfaceload
-from parody_py.plot_utils import rad_to_deg, get_Z_lim
+from paropy.data_utils import surfaceload
+from paropy.plot_utils import rad_to_deg, get_Z_lim
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
@@ -44,7 +44,7 @@ filename = directory + St_file
 #%%----------------------------------------------------------------------------
 # Plot
 w, h = plt.figaspect(fig_aspect)
-fig, ax = plt.subplots(1, 1, figsize=(w,0.6*h), 
+fig, ax = plt.subplots(1, 1, figsize=(1.5*w,h), 
                        subplot_kw={'projection': ccrs.Mollweide()})
 X,Y = rad_to_deg(phi, theta)
 Z = Br.T

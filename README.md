@@ -28,26 +28,30 @@ Sample scripts can be found within the module package `parody_py/scripts`.
 
 1. Open `parody_py/scripts/diagnostics.py`
 
-2. Folder structure should be of the form `<folder>/<run_ID>/Gt_*.run_ID`. Set path to simulation data by setting
+2. Set path to simulation data by setting
 
 ```
-folder = <folder>
-run_ID = <run_ID>
+run_ID = <run_ID> # PARODY simulation tag
+directory = <path_to_data>
 ```
 
 3. Run `parody_py/scripts/diagnostics.py`
 
 4. Admire the output:
 
+![](docs/diag1_test.png)
+
+![](docs/diag2_test.png)
+
 ### Example script: meridional snapshots
 
 1. Open `parody_py/scripts/meridional_snapshot.py`
 
-2. Folder structure should be of the form `<folder>/<run_ID>/Gt_*.run_ID`. Set path to simulation data by setting
+2. Set path to simulation data by setting
 
 ```
-folder = <folder>
-run_ID = <run_ID>
+run_ID = <run_ID> # PARODY simulation tag
+directory = <path_to_data>
 ```
 
 3. Specify timestamp of snapshot by setting `timestamp`
@@ -56,15 +60,17 @@ run_ID = <run_ID>
 
 5. Admire the output:
 
+![](docs/merid_test.png)
+
 ### Example script: surface snapshots
 
 1. Open `parody_py/scripts/surface_snapshot.py`
 
-2. Folder structure should be of the form `<folder>/<run_ID>/Gt_*.run_ID`. Set path to simulation data by setting
+2. Set path to simulation data by setting
 
 ```
-folder = <folder>
-run_ID = <run_ID>
+run_ID = <run_ID> # PARODY simulation tag
+directory = <path_to_data>
 ```
 
 3. Specify timestamp of snapshot by setting `timestamp`
@@ -73,21 +79,24 @@ run_ID = <run_ID>
 
 5. Admire the output:
 
+![](docs/surface_test.png)
+
 ## Links
 
-* [PyPI](https://test.pypi.org/project/slurpy/)
+* [PyPI](https://pypi.org/project/parody_py/)
+* [Anaconda Cloud](https://anaconda.org/jnywong/parody_py)
 
 ## Authors
 
-* **Jenny Wong** - *Institut de Physique du Globe de Paris/Institut des Sciences de la Terre*
+* [**Jenny Wong**](https://jnywong.github.io/) - *Institut de Physique du Globe de Paris - Institut des Sciences de la Terre*
 
 ## License
 
-This project is licensed under the MIT License - see the [license.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
 * Del Duca Foundation
-* ERC SEIS
+* ERC SEIC
 
 :tada:

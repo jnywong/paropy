@@ -17,7 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-from parody_py.data_utils import parodyload
+from paropy.data_utils import parodyload
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
@@ -45,8 +45,8 @@ filename = directory + Gt_file
 #%%----------------------------------------------------------------------------
 # Plot
 w, h = plt.figaspect(fig_aspect)
-fig = plt.figure(constrained_layout=True, figsize = (2.25*w,h))
-spec = gridspec.GridSpec(ncols = 3, nrows = 1, figure=fig)
+fig = plt.figure(constrained_layout=True, figsize = (1.5*w,h))
+spec = gridspec.GridSpec(ncols = 2, nrows = 1, figure=fig)
 
 ax = fig.add_subplot(spec[0,0])
 X = np.outer(radius,np.sin(theta),)
@@ -69,12 +69,12 @@ cbar=plt.colorbar(c,ax=ax, aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$\mathbf{B}$')
 ax.axis('off')
 
-ax = fig.add_subplot(spec[0,2])
-Z = np.mean(T,0).T
-c = ax.contourf(X,Y,Z,cmap='BrBG_r',extend='both')
-cbar=plt.colorbar(c,ax=ax,aspect = 50)
-cbar.ax.set_title(r'$T$')
-ax.axis('off')
+# ax = fig.add_subplot(spec[0,2])
+# Z = np.mean(T,0).T
+# c = ax.contourf(X,Y,Z,cmap='BrBG_r',extend='both')
+# cbar=plt.colorbar(c,ax=ax,aspect = 50)
+# cbar.ax.set_title(r'$T$')
+# ax.axis('off')
 
 # Save
 if saveOn==1:
