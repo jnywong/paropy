@@ -39,9 +39,9 @@ directory = <path_to_data>
 
 4. Admire the output:
 
-![](docs/diag1_test.png)
+![](https://raw.githubusercontent.com/jnywong/parody_py/master/docs/diag1_test.png)
 
-![](docs/diag2_test.png)
+![](https://raw.githubusercontent.com/jnywong/parody_py/master/docs/diag2_test.png)
 
 ### Example script: meridional snapshots
 
@@ -60,7 +60,7 @@ directory = <path_to_data>
 
 5. Admire the output:
 
-![](docs/merid_test.png)
+![](https://raw.githubusercontent.com/jnywong/parody_py/master/docs/merid_test.png)
 
 ### Example script: surface snapshots
 
@@ -79,7 +79,7 @@ directory = <path_to_data>
 
 5. Admire the output:
 
-![](docs/surface_test.png)
+![](https://raw.githubusercontent.com/jnywong/parody_py/master/docs/surface_test.png)
 
 ## Links
 
