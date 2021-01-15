@@ -15,6 +15,7 @@ Loads diagnostic outputs from PARODY-JA4.3:
     - inner core and mantle rotation and torques (if Coupled Earth run)
 
 """
+import os
 import pandas as pd
 
 from paropy.data_utils import load_kinetic,load_magnetic,load_nusselt, \

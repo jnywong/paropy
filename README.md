@@ -10,12 +10,12 @@ Python package to process data from PARODY-JA4.3 dynamo simulations.
 ### Installing
 Conda:
 ```
-conda install -c jnywong parody_py
+conda install -c jnywong paropy
 ```
 
 Pip:
 ```
-pip install parody_py
+pip install paropy
 ```
 
 Git:
@@ -39,9 +39,9 @@ directory = <path_to_data>
 
 4. Admire the output:
 
-![](https://raw.githubusercontent.com/jnywong/parody_py/master/docs/diag1_test.png)
+![](https://raw.githubusercontent.com/jnywong/paropy/master/docs/diag1_test.png)
 
-![](https://raw.githubusercontent.com/jnywong/parody_py/master/docs/diag2_test.png)
+![](https://raw.githubusercontent.com/jnywong/paropy/master/docs/diag2_test.png)
 
 ### Example script: meridional snapshots
 
@@ -60,7 +60,7 @@ directory = <path_to_data>
 
 5. Admire the output:
 
-![](https://raw.githubusercontent.com/jnywong/parody_py/master/docs/merid_test.png)
+![](https://raw.githubusercontent.com/jnywong/paropy/master/docs/merid_test.png)
 
 ### Example script: surface snapshots
 
@@ -79,12 +79,12 @@ directory = <path_to_data>
 
 5. Admire the output:
 
-![](https://raw.githubusercontent.com/jnywong/parody_py/master/docs/surface_test.png)
+![](https://raw.githubusercontent.com/jnywong/paropy/master/docs/surface_test.png)
 
 ## Links
 
-* [PyPI](https://pypi.org/project/parody_py/)
-* [Anaconda Cloud](https://anaconda.org/jnywong/parody_py)
+* [PyPI](https://pypi.org/project/paropy/)
+* [Anaconda Cloud](https://anaconda.org/jnywong/paropy)
 
 ## Authors
 
