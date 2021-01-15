@@ -22,9 +22,32 @@ Git:
 
 Find the Git repo [here](https://github.com/jnywong/nondim-slurry).
 
-### Example script: diagnostics
+##### IPython issue
+Please note that ipython may not be compatible with jedi release 0.18.0. Please revert to version 0.17.2 for auto-complete features to work (see [here](https://github.com/ipython/ipython/issues/12740)).
 
-Sample scripts can be found within the module package `paropy/scripts`.
+## Package structure
+```
+paropy/
+  LICENSE.md
+  MANIFEST.in
+  README.md
+  paropy/
+    __init__.py
+    data_utils.py
+    plot_utils.py
+    routines.py
+    scripts/
+      diagnostics.py
+      meridional_snapshot.py
+      surface_snapshot.py
+  setup.py
+```
+
+## Examples
+
+### Diagnostics
+
+Example scripts can be found within the module `paropy`.
 
 1. Open `paropy/scripts/diagnostics.py`
 
@@ -43,7 +66,7 @@ directory = <path_to_data>
 
 ![](https://raw.githubusercontent.com/jnywong/paropy/master/docs/diag2_test.png)
 
-### Example script: meridional snapshots
+### Meridional snapshots
 
 1. Open `paropy/scripts/meridional_snapshot.py`
 
@@ -62,7 +85,7 @@ directory = <path_to_data>
 
 ![](https://raw.githubusercontent.com/jnywong/paropy/master/docs/merid_test.png)
 
-### Example script: surface snapshots
+### Surface snapshots
 
 1. Open `paropy/scripts/surface_snapshot.py`
 
