@@ -19,3 +19,4 @@ def grav_torque(mantle_data):
     gamma_max = max(np.abs(mantle_data.gravitational_torque_on_mantle))
     
     return gamma,gamma_max
+
