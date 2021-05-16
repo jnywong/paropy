@@ -11,11 +11,10 @@ Loads diagnostic outputs from PARODY-JA4.3:
     - dipole e.g. g10, g11, B_rms
     - power e.g. convective power per unit volume
     - scales e.g. mean l for V, B, T (Christensen & Aubert, 2006)
-    - spec_l and spec_m 
+    - spec_l and spec_m
     - inner core and mantle rotation and torques (if Coupled Earth run)
 
 """
-import os
 import pandas as pd
 
 from paropy.data_utils import load_kinetic,load_magnetic,load_nusselt, \
@@ -25,9 +24,10 @@ from paropy.routines import sim_time, grav_torque
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
-#----------------------------------------------------------------------------%%
-run_ID = 'c-200a' # PARODY simulation tag
-directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID) # path containing simulation output
+#-------------------------------------------------------------------------------%%
+run_ID = 'd_0_55a' # PARODY simulation tag
+directory = '/data/geodynamo/wongj/Work'
+#directory = '/Users/wongj/Desktop/froggy/Work/{}/'.format(run_ID) # path containing simulation output
 
 #%%----------------------------------------------------------------------------
 # Load data
@@ -44,9 +44,9 @@ try:
 except FileNotFoundError:
     mantle_data=pd.DataFrame({'A' : []})
 # try:
-#     ic_data=load_innercore(run_ID,directory)         
-# except:         
-#     ic_data=pd.DataFrame({'A' : []})   
+#     ic_data=load_innercore(run_ID,directory)
+# except:
+#     ic_data=pd.DataFrame({'A' : []})
 
 #%%----------------------------------------------------------------------------
 # Output data

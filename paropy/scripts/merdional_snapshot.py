@@ -24,9 +24,13 @@ from paropy.plot_utils import streamfunction, T_shift, merid_outline
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'c-200a' # PARODY simulation tag
-directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID) # path containing simulation output
-timestamp = '16.84707134' 
+# run_ID = 'c-200a' # PARODY simulation tag
+# directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID) # path containing simulation output
+# timestamp = '16.84707134
+
+run_ID = 'd_0_55a'
+directory = '/Users/wongj/Desktop/froggy/Work/{}/'.format(run_ID)
+timestamp = '18.15707005'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 21 # no. of contour levels
@@ -41,10 +45,10 @@ saveOn = 0 # save figures?
 Gt_file = 'Gt={}.{}'.format(timestamp,run_ID)
 filename = directory + Gt_file
 
-# (version, time, DeltaU, Coriolis, Lorentz, Buoyancy, ForcingU, 
-#             DeltaT, ForcingT, DeltaB, ForcingB, Ek, Ra, Pm, Pr,
-#             nr, ntheta, nphi, azsym, radius, theta, phi, Vr, Vt, Vp,
-#             Br, Bt, Bp, T) = parodyload(filename)
+(version, time, DeltaU, Coriolis, Lorentz, Buoyancy, ForcingU,
+            DeltaT, ForcingT, DeltaB, ForcingB, Ek, Ra, Pm, Pr,
+            nr, ntheta, nphi, azsym, radius, theta, phi, Vr, Vt, Vp,
+            Br, Bt, Bp, T) = parodyload(filename)
 
 #%%----------------------------------------------------------------------------
 # Plot
