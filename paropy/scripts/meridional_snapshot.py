@@ -14,12 +14,15 @@ azimuthal magnetic field, temperature/codensity field in meridional slices.
 
 import os
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import cmocean.cm as cmo
 
 from paropy.data_utils import parodyload
 from paropy.plot_utils import streamfunction, T_shift, merid_outline
+
+matplotlib.use('TkAgg')  # backend for no display
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
@@ -28,9 +31,9 @@ from paropy.plot_utils import streamfunction, T_shift, merid_outline
 # directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID) # path containing simulation output
 # timestamp = '16.84707134
 
-run_ID = 'd_0_55a'
+run_ID = 'd_0_8a'
 directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID)  # path containing
-timestamp = '20.28436204'
+timestamp = '21.17830229'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 21 # no. of contour levels
@@ -40,7 +43,7 @@ Tr_min = 1.23
 linewidth=0.6
 
 saveOn = 1 # save figures?
-saveDir = '/home/wongj/Work/figures/diagnostics/'  # path to save files
+saveDir = '/home/wongj/Work/figures/meridional/'  # path to save files
 
 #%%----------------------------------------------------------------------------
 # Load data
@@ -67,7 +70,7 @@ Z = np.mean(Vp,0)
 # Z_lim = get_Z_lim(Z)
 Z_lim = Vmax
 levels = np.linspace(-Z_lim,Z_lim,n_levels)
-c = ax.contourf(X,Y,Z,levels,cmap=cmo.balance,extend='both')
+c = ax.contourf(X,Y,Z,levels,cmap='RdYlBu_r',extend='both')
 cbar=plt.colorbar(c,ax=ax, aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$\mathbf{u}$')
 # streamfunction
@@ -102,6 +105,7 @@ merid_outline(ax,radius,linewidth)
 ax.axis('off')
 
 ax = fig.add_subplot(spec[0,2])
+# FIX: C shift
 Z0 = np.mean(T,0)
 Ts_max = np.mean(Z0[:,61])
 Ts_min = np.mean(Z0[:,-1])
@@ -111,9 +115,9 @@ Z = Z1 + 0.5
 lev_max = 0.5
 lev_min = -lev_max
 levels=np.linspace(lev_min,lev_max,n_levels)
-c = ax.contourf(X,Y,Z,levels,cmap=cmo.dense_r,extend='both')
+c = ax.contourf(X,Y,Z,levels,cmap='inferno',extend='both')
 cbar=plt.colorbar(c,ax=ax,aspect = 50, ticks=levels[::2])
-cbar.ax.set_title(r'$T$')
+cbar.ax.set_title(r'$C$')
 merid_outline(ax,radius,linewidth)
 ax.axis('off')
 
@@ -121,8 +125,8 @@ ax.axis('off')
 if saveOn==1:
     if not os.path.exists(saveDir+'{}'.format(run_ID)):
         os.makedirs(saveDir+'{}'.format(run_ID))
-    fig.savefig(saveDir+'/meridional/{}.png'.format(timestamp),format='png',
+    fig.savefig(saveDir+'{}/{}.png'.format(run_ID, timestamp),format='png',
                 dpi=200,bbox_inches='tight')
-    fig.savefig(saveDir+'/meridional/{}.pdf'.format(timestamp),format='pdf',
+    fig.savefig(saveDir+'{}/{}.pdf'.format(run_ID, timestamp),format='pdf',
                 dpi=200,bbox_inches='tight')
-    print('Figures saved as {}/meridional/{}'.format(directory,timestamp))
+    print('Figures saved as {}{}/{}.*'.format(saveDir,run_ID,timestamp))

@@ -30,7 +30,7 @@ matplotlib.use('TkAgg') # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'd_0_65a' # PARODY simulation tag
+run_ID = 'd_0_75a' # PARODY simulation tag
 directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID) # path containing simulation output
 saveDir = '/home/wongj/Work/figures/diagnostics/' # path to save files
 
