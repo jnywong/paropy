@@ -29,8 +29,8 @@ from paropy.plot_utils import streamfunction, T_shift, merid_outline
 # timestamp = '16.84707134
 
 run_ID = 'd_0_55a'
-directory = '/Users/wongj/Desktop/froggy/Work/{}/'.format(run_ID)
-timestamp = '18.15707005'
+directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID)  # path containing
+timestamp = '20.28436204'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 21 # no. of contour levels
@@ -38,7 +38,9 @@ Vmax = 250 # max Vp
 Bmax = 2.5 # max Bp
 Tr_min = 1.23
 linewidth=0.6
-saveOn = 0 # save figures?
+
+saveOn = 1 # save figures?
+saveDir = '/home/wongj/Work/figures/diagnostics/'  # path to save files
 
 #%%----------------------------------------------------------------------------
 # Load data
@@ -117,10 +119,10 @@ ax.axis('off')
 
 # Save
 if saveOn==1:
-    if not os.path.exists(directory+'/figures'):
-        os.makedirs(directory+'/figures')
-    fig.savefig(directory+'/figures/merid_{}.png'.format(timestamp),format='png',
+    if not os.path.exists(saveDir+'{}'.format(run_ID)):
+        os.makedirs(saveDir+'{}'.format(run_ID))
+    fig.savefig(saveDir+'/meridional/{}.png'.format(timestamp),format='png',
                 dpi=200,bbox_inches='tight')
-    fig.savefig(directory+'/figures/merid_{}.pdf'.format(timestamp),format='pdf',
+    fig.savefig(saveDir+'/meridional/{}.pdf'.format(timestamp),format='pdf',
                 dpi=200,bbox_inches='tight')
-    print('Figures saved as {}/figures/merid_{}'.format(directory,timestamp))
+    print('Figures saved as {}/meridional/{}'.format(directory,timestamp))

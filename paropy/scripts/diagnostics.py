@@ -29,13 +29,14 @@ matplotlib.use('TkAgg') # backend for no display
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
-#-------------------------------------------------------------------------------%%
-run_ID = 'd_0_55a' # PARODY simulation tag
+#----------------------------------------------------------------------------%%
+run_ID = 'd_0_65a' # PARODY simulation tag
 directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID) # path containing simulation output
 saveDir = '/home/wongj/Work/figures/diagnostics/' # path to save files
 
-#%%----------------------------------------------------------------------------
-# Load data
+plotOn=1 # Plot and save
+
+#%% Load data
 kinetic_data=load_kinetic(run_ID,directory)
 magnetic_data=load_magnetic(run_ID,directory)
 # nusselt_data=load_nusselt(run_ID,directory)
@@ -63,27 +64,28 @@ print('Mean of gravitational torque on mantle: {:.2f} ({:.4e} of the maximum abs
                 gamma, gamma/gamma_max))
 
 # Plot
-ax1=kinetic_data.plot("time","ke_per_unit_vol")
-kinetic_data.plot("time","poloidal_ke",ax=ax1)
-kinetic_data.plot("time","toroidal_ke",ax=ax1)
-fig1 = ax1.get_figure()
+if plotOn==1:
+    ax1=kinetic_data.plot("time","ke_per_unit_vol")
+    kinetic_data.plot("time","poloidal_ke",ax=ax1)
+    kinetic_data.plot("time","toroidal_ke",ax=ax1)
+    fig1 = ax1.get_figure()
 
-ax2=magnetic_data.plot("time","me_per_unit_vol")
-magnetic_data.plot("time","poloidal_me",ax=ax2)
-magnetic_data.plot("time","toroidal_me",ax=ax2)
-fig2 = ax1.get_figure()
+    ax2=magnetic_data.plot("time","me_per_unit_vol")
+    magnetic_data.plot("time","poloidal_me",ax=ax2)
+    magnetic_data.plot("time","toroidal_me",ax=ax2)
+    fig2 = ax2.get_figure()
 
-ax3=mantle_data.plot("time","mantle_rotation_rate")
-fig3 = ax1.get_figure()
+    ax3=mantle_data.plot("time","mantle_rotation_rate")
+    fig3 = ax3.get_figure()
 
-ax4=mantle_data.plot("time","gravitational_torque_on_mantle")
-fig4 = ax1.get_figure()
+    ax4=mantle_data.plot("time","gravitational_torque_on_mantle")
+    fig4 = ax4.get_figure()
 
-# Save 
-if not os.path.exists(saveDir):
-    os.makedirs(saveDir)
-fig1.savefig(saveDir+'{}_ke.png'.format(run_ID))
-fig2.savefig(saveDir+'{}_me.png'.format(run_ID))
-fig3.savefig(saveDir+'{}_mantle_rot.png'.format(run_ID))
-fig4.savefig(saveDir+'{}_mantle_grav_torque.png'.format(run_ID))
-print('Figures saved in {}'.format(saveDir))
+    # Save 
+    if not os.path.exists(saveDir+'{}'.format(run_ID)):
+        os.makedirs(saveDir+'{}'.format(run_ID))
+    fig1.savefig(saveDir+'{}/kinetic.png'.format(run_ID))
+    fig2.savefig(saveDir+'{}/magnetic.png'.format(run_ID))
+    fig3.savefig(saveDir+'{}/mantle_rotation.png'.format(run_ID))
+    fig4.savefig(saveDir+'{}/mantle_grav_torque.png'.format(run_ID))
+    print('Figures saved in {}{}'.format(saveDir,run_ID))
