@@ -20,27 +20,25 @@ import matplotlib.gridspec as gridspec
 import cmocean.cm as cmo
 
 from paropy.data_utils import parodyload
-from paropy.plot_utils import streamfunction, T_shift, merid_outline
+from paropy.plot_utils import flayer_outline, streamfunction, T_shift, merid_outline
 
-matplotlib.use('TkAgg')  # backend for no display
+matplotlib.use('Agg')  # backend for no display
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-# run_ID = 'c-200a' # PARODY simulation tag
-# directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID) # path containing simulation output
-# timestamp = '16.84707134
-
-run_ID = 'd_0_8a'
+run_ID = 'd_0_6a'
+rf = 0.6
 directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID)  # path containing
-timestamp = '21.17830229'
+# timestamp = '20.28436204'
+timestamp ='21.49797360'
+# timestamp = '21.17830229'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 21 # no. of contour levels
 Vmax = 250 # max Vp
 Bmax = 2.5 # max Bp
 Tr_min = 1.23
-linewidth=0.6
 
 saveOn = 1 # save figures?
 saveDir = '/home/wongj/Work/figures/meridional/'  # path to save files
@@ -84,7 +82,7 @@ c = ax.contour(X,Y,Z, 9 , colors='grey', alpha = 0.5)
 # ax.plot(x, y, 'k')
 # ax.vlines(0,radius[0],radius[-1],'k')
 # ax.vlines(0,-radius[0],-radius[-1],'k')
-merid_outline(ax,radius,linewidth)
+merid_outline(ax,radius)
 ax.axis('off')
 
 # Field
@@ -101,24 +99,32 @@ Br_m = np.mean(Br,0)
 Bt_m = np.mean(Bt,0)
 Z = streamfunction(radius, theta, Br_m, Bt_m)
 c = ax.contour(X,Y,Z, 9 , colors='grey', alpha = 0.5)
-merid_outline(ax,radius,linewidth)
+merid_outline(ax,radius)
 ax.axis('off')
 
 ax = fig.add_subplot(spec[0,2])
 # FIX: C shift
+# Z = np.mean(T,0)
 Z0 = np.mean(T,0)
-Ts_max = np.mean(Z0[:,61])
-Ts_min = np.mean(Z0[:,-1])
+idx = np.argwhere(radius>rf)[0][0]
+# Ts_max = np.mean(Z0[:,idx+1]) # max T near top of F-layer
+# Ts_min = np.mean(Z0[:,-1]) # min T near CMB 
+Ts_max = np.max(Z0)
+Ts_min = np.min(Z0)
 h = Ts_max-Ts_min
 Z1 = (Z0 - Ts_max)/h
-Z = Z1 + 0.5
 lev_max = 0.5
+# lev_max = np.round(max(abs(np.max(Z)),abs(np.min(Z))),1)
+Z = Z1 + lev_max
+# Z = Z1 + lev_max
 lev_min = -lev_max
 levels=np.linspace(lev_min,lev_max,n_levels)
 c = ax.contourf(X,Y,Z,levels,cmap='inferno',extend='both')
+# c = ax.contourf(X,Y,Z,cmap='inferno',extend='both')
 cbar=plt.colorbar(c,ax=ax,aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$C$')
-merid_outline(ax,radius,linewidth)
+merid_outline(ax,radius)
+flayer_outline(ax,rf)
 ax.axis('off')
 
 # Save

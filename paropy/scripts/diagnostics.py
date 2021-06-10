@@ -25,12 +25,12 @@ load_dipole,load_power,load_scales,load_spec_l,load_spec_m, load_mantle, \
 load_innercore
 from paropy.routines import sim_time, grav_torque
 
-matplotlib.use('TkAgg') # backend for no display 
+matplotlib.use('Agg') # backend for no display 
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'd_0_75a' # PARODY simulation tag
+run_ID = 'c-200a' # PARODY simulation tag
 directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID) # path containing simulation output
 saveDir = '/home/wongj/Work/figures/diagnostics/' # path to save files
 

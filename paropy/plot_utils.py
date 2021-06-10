@@ -78,10 +78,15 @@ def semicircle(center_x, center_y, radius, stepsize=0.1):
 
     return x, y + center_y
 
-def merid_outline(ax,radius,linewidth):
+def merid_outline(ax,radius,linewidth=0.6):
     x,y = semicircle(0,0,radius[0], 1e-4)
     ax.plot(x, y, 'k', lw=linewidth)
     x,y = semicircle(0,0,radius[-1], 1e-4)
     ax.plot(x, y, 'k', lw=linewidth)
     ax.vlines(0,radius[0],radius[-1],'k', lw=linewidth)
     ax.vlines(0,-radius[0],-radius[-1],'k', lw=linewidth)
+
+
+def flayer_outline(ax, rf):
+    x, y = semicircle(0, 0, rf, 1e-4)
+    ax.plot(x, y, '--', color='darkgray')
