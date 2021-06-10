@@ -53,13 +53,25 @@ def streamfunction(radius,theta,ur,ut):
      
     return (psi)
 
-def T_shift(Z0):
-    '''Normalise and shift the temperature field scale'''
-    h = 0.08
-    Z1 = Z0/h
-    Z = Z1 - Z1.max() + 0.5
-    
-    return Z1, Z
+def round_down(n, decimals=0):
+    multiplier = 10 ** decimals
+    return math.floor(n * multiplier) / multiplier
+
+def C_shift(radius, rf, Z0, n_levels, lev_min=0, lev_max=1):
+    '''Normalise and shift the codensity field scale so that a < C < b -> 0 < (C - b)/h + 1 < 1'''
+    idx = np.argwhere(radius > rf)[0][0]
+    if rf !=0:
+        Ts_max = np.mean(Z0[:, idx+1])  # b: max T near top of F-layer
+        Ts_min = np.mean(Z0[:, -1])  # a: min T near CMB
+    else:
+        # round down to highlight lighter elements piling up in tangent cylinder
+        Ts_max = round_down(np.max(Z0),2)
+        Ts_min = np.min(Z0) 
+    h = Ts_max-Ts_min
+    Z1 = (Z0 - Ts_max)/h  # normalise
+    Z = Z1 + lev_max
+    levels = np.linspace(lev_min, lev_max, n_levels)
+    return Z, levels
 
 def semicircle(center_x, center_y, radius, stepsize=0.1):
     """
@@ -78,7 +90,7 @@ def semicircle(center_x, center_y, radius, stepsize=0.1):
 
     return x, y + center_y
 
-def merid_outline(ax,radius,linewidth=0.6):
+def merid_outline(ax,radius,linewidth=0.5):
     x,y = semicircle(0,0,radius[0], 1e-4)
     ax.plot(x, y, 'k', lw=linewidth)
     x,y = semicircle(0,0,radius[-1], 1e-4)
@@ -86,7 +98,6 @@ def merid_outline(ax,radius,linewidth=0.6):
     ax.vlines(0,radius[0],radius[-1],'k', lw=linewidth)
     ax.vlines(0,-radius[0],-radius[-1],'k', lw=linewidth)
 
-
-def flayer_outline(ax, rf):
+def flayer_outline(ax, rf,linewidth=0.5):
     x, y = semicircle(0, 0, rf, 1e-4)
-    ax.plot(x, y, '--', color='darkgray')
+    ax.plot(x, y, '--', lw = linewidth, color='darkgray')

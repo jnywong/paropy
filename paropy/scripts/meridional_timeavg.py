@@ -7,7 +7,7 @@ Created on Mon Jan 11 10:49:39 2021
 
 Python version of PARODY-JA4.3 Matlab file 'Matlab/parodyloadload_v4.m'.
 
-Loads graphics file and plots snapshots of the azimuthal velocity field,
+Loads graphics file and plots time average of the azimuthal velocity field,
 azimuthal magnetic field, temperature/codensity field in meridional slices.
 
 """
@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import cmocean.cm as cmo
 
-from paropy.data_utils import parodyload, load_dimensionless
+from paropy.data_utils import parodyload
 from paropy.plot_utils import flayer_outline, streamfunction, C_shift, merid_outline
 
 matplotlib.use('Agg')  # backend for no display
@@ -27,14 +27,14 @@ matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID, timestamp = 'ref_c', '6.846397324'
-run_ID, timestamp = 'd_0_55a', '20.28436204'
-run_ID, timestamp = 'd_0_6a', '21.49797360'
-run_ID, timestamp = 'd_0_65a', '18.16950357'
-run_ID, timestamp = 'c-200a', '16.84707134'
-run_ID, timestamp = 'd_0_75a', '21.43895335'
-run_ID, timestamp = 'd_0_8a', '21.17830229'
-directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID)  # path containing runs
+run_ID, rf  = 'ref_c', 0
+# run_ID, rf = 'd_0_55a', 0.55
+# run_ID, rf = 'd_0_6a', 0.6
+# run_ID, rf = 'd_0_65a', 0.65
+# run_ID, rf = 'c-200a', 0.7
+# run_ID, rf = 'd_0_75a', 0.75
+# run_ID, rf = 'd_0_8a', 0.8
+directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 21 # no. of contour levels
@@ -44,7 +44,7 @@ Tr_min = 1.23
 lineWidth = 0.8
 
 saveOn = 1 # save figures?
-saveDir = '/home/wongj/Work/figures/meridional/'  # path to save files
+saveDir = '/home/wongj/Work/figures/meridional'  # path to save files
 
 #%%----------------------------------------------------------------------------
 # Load data
@@ -55,8 +55,6 @@ filename = directory + Gt_file
             DeltaT, ForcingT, DeltaB, ForcingB, Ek, Ra, Pm, Pr,
             nr, ntheta, nphi, azsym, radius, theta, phi, Vr, Vt, Vp,
             Br, Bt, Bp, T) = parodyload(filename)
-
-NR, Ek, Ra, Pr, Pm, fi, rf = load_dimensionless(run_ID, directory)
 
 #%%----------------------------------------------------------------------------
 # Plot
@@ -112,10 +110,10 @@ ax.axis('off')
 
 # Save
 if saveOn==1:
-    if not os.path.exists(saveDir+'{}'.format(run_ID)):
-        os.makedirs(saveDir+'{}'.format(run_ID))
-    fig.savefig(saveDir+'{}/{}.png'.format(run_ID, timestamp),format='png',
+    if not os.path.exists(saveDir+'/{}'.format(run_ID)):
+        os.makedirs(saveDir+'/{}'.format(run_ID))
+    fig.savefig(saveDir+'/{}/{}.png'.format(run_ID, timestamp),format='png',
                 dpi=200,bbox_inches='tight')
-    fig.savefig(saveDir+'{}/{}.pdf'.format(run_ID, timestamp),format='pdf',
+    fig.savefig(saveDir+'/{}/{}.pdf'.format(run_ID, timestamp),format='pdf',
                 dpi=200,bbox_inches='tight')
-    print('Figures saved as {}{}/{}.*'.format(saveDir,run_ID,timestamp))
+    print('Figures saved as {}/{}/{}.*'.format(saveDir,run_ID,timestamp))

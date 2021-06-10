@@ -8,6 +8,7 @@ Created on Fri Jan  8 16:10:19 2021
 
 import pandas as pd
 import numpy as np
+import re
 
 #------------------------------------------------------------------------------
 # Diagnostics
@@ -110,6 +111,7 @@ def load_innercore(run_ID,directory):
     return (data)
 
 #------------------------------------------------------------------------------
+# Graphics and surface data
 def fread(fid, nelements, dtype):
      '''Matlab fread equivalent'''
      if dtype is np.str:
@@ -338,3 +340,34 @@ def surfaceload_short(filename):
     return (version, time, DeltaU, Coriolis, Lorentz, Buoyancy, ForcingU,
             DeltaT, ForcingT, DeltaB, ForcingB, Ek, Ra, Pm, Pr,
             nr, ntheta, nphi, azsym, radius, theta, phi)
+
+#------------------------------------------------------------------------------
+def load_dimensionless(run_ID, directory):
+    filename = '{}/log.{}'.format(directory, run_ID)
+
+    f = open(filename, "r")
+    lines = [29, 50, 54, 55, 59, 73, 75]
+    i = 0
+    final_list = []
+    for line in f:
+        if i in lines:
+            match_number = re.compile(
+                '-?\ *[0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?')
+            final_list.append([float(x)
+                              for x in re.findall(match_number, line)])
+        i = i+1
+    f.close()
+
+    NR = final_list[0][0]
+    Ek = final_list[1][0]
+    Ra = final_list[2][0]
+    Pr = final_list[3][0]
+    Pm = final_list[4][0]
+    try:
+        rstrat = final_list[6][0]
+        fi = final_list[5][0]/100  # divide percentage by 100
+    except IndexError:  # for runs with no stratification
+        rstrat = 0
+        fi = 0
+
+    return (NR, Ek, Ra, Pr, Pm, fi, rstrat)
