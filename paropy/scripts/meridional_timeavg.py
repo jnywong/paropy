@@ -19,7 +19,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import cmocean.cm as cmo
 
-from paropy.data_utils import parodyload
+from paropy.data_utils import parodyload, load_dimensionless
 from paropy.plot_utils import flayer_outline, streamfunction, C_shift, merid_outline
 
 matplotlib.use('Agg')  # backend for no display
@@ -27,13 +27,13 @@ matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID, rf  = 'ref_c', 0
-# run_ID, rf = 'd_0_55a', 0.55
-# run_ID, rf = 'd_0_6a', 0.6
-# run_ID, rf = 'd_0_65a', 0.65
-# run_ID, rf = 'c-200a', 0.7
-# run_ID, rf = 'd_0_75a', 0.75
-# run_ID, rf = 'd_0_8a', 0.8
+# run_ID  = 'ref_c'
+# run_ID = 'd_0_55a'
+# run_ID = 'd_0_6a'
+# run_ID = 'd_0_65a'
+run_ID = 'c-200a'
+# run_ID = 'd_0_75a'
+# run_ID = 'd_0_8a'
 directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
 
 fig_aspect = 1 # figure aspect ratio
@@ -48,13 +48,9 @@ saveDir = '/home/wongj/Work/figures/meridional'  # path to save files
 
 #%%----------------------------------------------------------------------------
 # Load data
-Gt_file = 'Gt={}.{}'.format(timestamp,run_ID)
-filename = directory + Gt_file
+_, _, _, _, _, fi, rf = load_dimensionless(run_ID, directory)
 
-(version, time, DeltaU, Coriolis, Lorentz, Buoyancy, ForcingU,
-            DeltaT, ForcingT, DeltaB, ForcingB, Ek, Ra, Pm, Pr,
-            nr, ntheta, nphi, azsym, radius, theta, phi, Vr, Vt, Vp,
-            Br, Bt, Bp, T) = parodyload(filename)
+# ADD: load time avg data
 
 #%%----------------------------------------------------------------------------
 # Plot
