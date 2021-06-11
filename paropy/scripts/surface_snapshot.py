@@ -23,9 +23,10 @@ from paropy.plot_utils import rad_to_deg, get_Z_lim
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'c-200a' # PARODY simulation tag
-directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID) # path containing simulation output
-timestamp = '16.84707134' 
+run_ID = 'd_0_55a' # PARODY simulation tag
+# directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID) # path containing simulation output
+directory = '/Users/wongj/Documents/parodydata/{}'.format(run_ID)
+timestamp = '20.28436204'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 61 # no. of contour levels
@@ -34,7 +35,7 @@ saveOn = 0 # save figures?
 #%%----------------------------------------------------------------------------
 # Load data
 St_file = 'St={}.{}'.format(timestamp,run_ID)
-filename = directory + St_file
+filename = '{}/{}'.format(directory,St_file)
 
 (version, time, DeltaU, Coriolis, Lorentz, Buoyancy, ForcingU, 
             DeltaT, ForcingT, DeltaB, ForcingB, Ek, Ra, Pm, Pr,
