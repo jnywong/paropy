@@ -8,6 +8,7 @@ Created on Fri Jan  8 16:10:19 2021
 
 import pandas as pd
 import numpy as np
+import os
 import re
 
 #------------------------------------------------------------------------------
@@ -252,96 +253,29 @@ def surfaceload(filename):
             nr, ntheta, nphi, azsym, radius, theta, phi, Vt, Vp, Br,
             dtBr)
 
-def parodyload_short(filename):
-    '''PARODY-JA4.3/Matlab/parodyload_v4.m equivalent'''
-    fid = open(filename, 'rb')
-
-    version = fread(fid, 1, np.int16)
-    version = version[0][0]
-    dummy = fread(fid, 1, np.int16)
-    phypar = fread(fid, 10, np.float64)
-    # Simulation parameters
-    time = phypar[0][0]
-    DeltaU = phypar[1][0]
-    Coriolis = phypar[2][0]
-    Lorentz = phypar[3][0]
-    Buoyancy = phypar[4][0]
-    ForcingU = phypar[5][0]
-    DeltaT = phypar[6][0]
-    ForcingT = phypar[7][0]
-    DeltaB = phypar[8][0]
-    ForcingB = phypar[9][0]
-
-    Ek = 1/Coriolis
-    Ra = Buoyancy*Ek
-    Pm = 1/DeltaB
-    Pr = 1/DeltaT
-
-    # Grid parameters
-    gridpar = fread(fid, 8, np.int16)
-    nr = int(gridpar[0][0])
-    ntheta = int(gridpar[2][0])
-    nphi = int(gridpar[4][0])
-    azsym = int(gridpar[6][0])
-
-    radius = fread(fid, nr, np.float64)
-    radius = radius.transpose()[0]
-    theta = fread(fid, ntheta, np.float64)
-    theta = theta.transpose()[0]
-    phi = np.arange(1,nphi+1)*2*np.pi/(nphi*azsym)
-
-    fid.close()
-
-    return (version, time, DeltaU, Coriolis, Lorentz, Buoyancy, ForcingU,
-            DeltaT, ForcingT, DeltaB, ForcingB, Ek, Ra, Pm, Pr,
-            nr, ntheta, nphi, azsym, radius, theta, phi)
-
-def surfaceload_short(filename):
-    '''PARODY-JA4.3/Matlab/surfaceload_v4.m equivalent'''
-    fid = open(filename, 'rb')
-
-    version = fread(fid, 1, np.int16)
-    version = version[0][0]
-    dummy = fread(fid, 1, np.int16)
-    phypar = fread(fid, 11, np.float64)
-    # Simulation parameters
-    time = phypar[0][0]
-    dt = phypar[1][0]
-    DeltaU = phypar[2][0]
-    Coriolis = phypar[3][0]
-    Lorentz = phypar[4][0]
-    Buoyancy = phypar[5][0]
-    ForcingU = phypar[6][0]
-    DeltaT = phypar[7][0]
-    ForcingT = phypar[8][0]
-    DeltaB = phypar[9][0]
-    ForcingB = phypar[10][0]
-
-    Ek = 1/Coriolis
-    Ra = Buoyancy*Ek
-    Pm = 1/DeltaB
-    Pr = 1/DeltaT
-
-    # Grid parameters
-    gridpar = fread(fid, 8, np.int16)
-    nr = int(gridpar[0][0])
-    ntheta = int(gridpar[2][0])
-    nphi = int(gridpar[4][0])
-    azsym = int(gridpar[6][0])
-
-    radius = fread(fid, nr, np.float64)
-    radius = radius.transpose()[0]
-    theta = fread(fid, ntheta, np.float64)
-    theta = theta.transpose()[0]
-    phi = np.arange(1,nphi+1)*2*np.pi/(nphi*azsym)
-
-    fid.close()
-
-    return (version, time, DeltaU, Coriolis, Lorentz, Buoyancy, ForcingU,
-            DeltaT, ForcingT, DeltaB, ForcingB, Ek, Ra, Pm, Pr,
-            nr, ntheta, nphi, azsym, radius, theta, phi)
-
 #------------------------------------------------------------------------------
+def list_Gt_files(run_ID,directory):
+    '''Make a list of all Gt file names'''
+    Gt_file = []
+    for files in os.walk(directory+"/"):
+        for file in files[2]:
+            if file.startswith('Gt=') and file.endswith('.{}'.format(run_ID)):
+                Gt_file.append(file)
+    Gt_file = sorted(Gt_file)
+
+    return Gt_file
+
+def list_St_files(run_ID, directory):
+    '''Make a list of all St file names'''
+    St_file = []
+    for files in os.walk(directory+"/"):
+        for file in files[2]:
+            if file.startswith('St=') and file.endswith('.{}'.format(run_ID)):
+                St_file.append(file)
+    St_file = sorted(St_file)
+
+    return St_file
+
 def load_dimensionless(run_ID, directory):
     filename = '{}/log.{}'.format(directory, run_ID)
 

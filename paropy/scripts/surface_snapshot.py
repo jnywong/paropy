@@ -14,24 +14,27 @@ ATTENTION: Folder structure should be of the form `<folder>/<run_ID>/Gt_*.run_ID
 
 import os
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 
 from paropy.data_utils import surfaceload
 from paropy.plot_utils import rad_to_deg, get_Z_lim
 
+matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
 run_ID = 'd_0_55a' # PARODY simulation tag
-# directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID) # path containing simulation output
-directory = '/Users/wongj/Documents/parodydata/{}'.format(run_ID)
-timestamp = '20.28436204'
+directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
+# directory = '/Users/wongj/Documents/parodydata/{}'.format(run_ID)
+timestamp = '20.26738099'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 61 # no. of contour levels
-saveOn = 0 # save figures?
 
+saveOn = 0 # save figures?
+saveDir = '/home/wongj/Work/figures/surface/'  # path to save files
 #%%----------------------------------------------------------------------------
 # Load data
 St_file = 'St={}.{}'.format(timestamp,run_ID)
@@ -63,10 +66,11 @@ ax.gridlines()
 ax.set_global()
 
 # Save
-if saveOn==1:
-    if not os.path.exists(directory+'/figures'):
-        os.makedirs(directory+'/figures')
-    fig.savefig(directory+'/figures/surf_{}.png'.format(timestamp),format='png',
-                dpi=200,bbox_inches='tight')
-    fig.savefig(directory+'/figures/surf_{}.pdf'.format(timestamp),format='pdf',
-                dpi=200,bbox_inches='tight')
+if saveOn == 1:
+    if not os.path.exists(saveDir+'{}'.format(run_ID)):
+        os.makedirs(saveDir+'{}'.format(run_ID))
+    fig.savefig(saveDir+'{}/{}.png'.format(run_ID, timestamp), format='png',
+                dpi=200, bbox_inches='tight')
+    fig.savefig(saveDir+'{}/{}.pdf'.format(run_ID, timestamp), format='pdf',
+                dpi=200, bbox_inches='tight')
+    print('Figures saved as {}{}/{}.*'.format(saveDir, run_ID, timestamp))
