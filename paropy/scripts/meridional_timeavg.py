@@ -17,12 +17,13 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-import cmocean.cm as cmo
+import h5py
 
-from paropy.data_utils import parodyload, load_dimensionless
-from paropy.plot_utils import flayer_outline, streamfunction, C_shift, merid_outline
+from paropy.data_utils import load_dimensionless
+from paropy.plot_utils import streamfunction, C_shift, merid_outline
+from paropy.routines import meridional_timeavg
 
-matplotlib.use('Agg')  # backend for no display
+# matplotlib.use('Agg')  # backend for no display
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
@@ -34,7 +35,8 @@ matplotlib.use('Agg')  # backend for no display
 run_ID = 'c-200a'
 # run_ID = 'd_0_75a'
 # run_ID = 'd_0_8a'
-directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
+# directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
+directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 21 # no. of contour levels
@@ -44,13 +46,27 @@ Tr_min = 1.23
 lineWidth = 0.8
 
 saveOn = 1 # save figures?
-saveDir = '/home/wongj/Work/figures/meridional'  # path to save files
+# saveDir = '/home/wongj/Work/figures/meridional'  # path to save files
+saveDir = '/Users/wongj/Documents/isterre/parody/figures/meridional'
 
 #%%----------------------------------------------------------------------------
 # Load data
 _, _, _, _, _, fi, rf = load_dimensionless(run_ID, directory)
-
-# ADD: load time avg data
+if not os.path.exists('{}/meridional_timeavg'.format(directory)):
+    (radius, theta, phi, Vr, Vt, Vp, Br, Bt,
+     Bp, T) = meridional_timeavg(run_ID, directory)  # timeavg
+else:  # load timeavg data
+    print('Loading {}/meridional_timeavg'.format(directory))
+    f = h5py.File('{}/meridional_timeavg'.format(directory), 'r')
+    # f.keys()
+    # theta = np.array(f['theta'])
+    # phi = np.array(f['phi'])
+    # Vt = np.array(f['Vt'])
+    # Vp = np.array(f['Vp'])
+    # Br = np.array(f['Br'])
+    # dtBr = np.array(f['dtBr'])
+    for key in f.keys():
+        globals()[key] = f.create_dataset(key, f[key].shape)
 
 #%%----------------------------------------------------------------------------
 # Plot
@@ -101,15 +117,15 @@ c = ax.contourf(X,Y,Z,levels,cmap='inferno')
 cbar=plt.colorbar(c,ax=ax,aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$C$')
 merid_outline(ax,radius)
-# flayer_outline(ax,rf)
+# flayerline(ax,rf)
 ax.axis('off')
 
 # Save
 if saveOn==1:
     if not os.path.exists(saveDir+'/{}'.format(run_ID)):
         os.makedirs(saveDir+'/{}'.format(run_ID))
-    fig.savefig(saveDir+'/{}/{}.png'.format(run_ID, timestamp),format='png',
+    fig.savefig(saveDir+'/{}/meridional_timeavg.png'.format(run_ID),format='png',
                 dpi=200,bbox_inches='tight')
-    fig.savefig(saveDir+'/{}/{}.pdf'.format(run_ID, timestamp),format='pdf',
+    fig.savefig(saveDir+'/{}/meridional_timeavg.pdf'.format(run_ID), format='pdf',
                 dpi=200,bbox_inches='tight')
-    print('Figures saved as {}/{}/{}.*'.format(saveDir,run_ID,timestamp))
+    print('Figures saved as {}/{}/meridional_timeavg.*'.format(saveDir, run_ID))

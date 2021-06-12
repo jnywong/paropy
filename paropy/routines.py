@@ -37,7 +37,7 @@ def meridional_timeavg(run_ID, directory):
         filename = '{}/{}'.format(directory,file)
         (_, _, _, _, _, _, _,
             _, _, _, _, _, _, _, _,
-            _, _, _, _, _, _, _, Vr, Vt, Vp,
+            _, _, _, _, radius, theta, phi, Vr, Vt, Vp,
             Br, Bt, Bp, T) = parodyload(filename)
         # Zonal averages
         Vr_m.append(np.mean(Vr,axis=0))
@@ -63,8 +63,21 @@ def meridional_timeavg(run_ID, directory):
     Bt_out = sum(Bt_m)/n
     Bp_out = sum(Bp_m)/n
     T_out = sum(T_m)/n
+    
+    # Save
+    with h5py.File('{}/meridional_timeavg'.format(directory), 'a') as f:
+        f.create_dataset('radius', data=radius)
+        f.create_dataset('theta', data=theta)
+        f.create_dataset('phi', data=phi)
+        f.create_dataset('Vr', data=Vr_out)
+        f.create_dataset('Vt', data=Vt_out)
+        f.create_dataset('Vp', data=Vp_out)
+        f.create_dataset('Br', data=Br_out)
+        f.create_dataset('Bt', data=Bt_out)
+        f.create_dataset('Bp', data=Bp_out)
+        f.create_dataset('T', data=T_out)
 
-    return (Vr_out, Vt_out, Vp_out, Br_out, Bt_out, Bp_out, T_out)
+    return (radius, theta, phi, Vr_out, Vt_out, Vp_out, Br_out, Bt_out, Bp_out, T_out)
 
 def surface_timeavg(run_ID, directory):
     St_file = list_St_files(run_ID,directory) # Find all Gt_no in folder
@@ -92,23 +105,14 @@ def surface_timeavg(run_ID, directory):
     Vp_out = sum(Vp_s)/n
     Br_out = sum(Br_s)/n
     dtBr_out = sum(dtBr_s)/n
-    print('hey tobes')
 
     # Save 
-    # data = [theta, phi, Vt_out, Vp_out, Br_out, dtBr_out]
-    # np.savez('{}/surface_timeavg.npz'.format(directory), *data)
-    # print('{}/surface_timeavg.npz saved'.format(directory))
     with h5py.File('{}/surface_timeavg'.format(directory), 'w') as f:
         f.create_dataset('theta', data=theta)
-        print('hey brah')
         f.create_dataset('phi', data=phi)
-        print('hey poop')
         f.create_dataset('Vt', data=Vt_out)
-        print('hey Gris')
         f.create_dataset('Vp', data=Vp_out)
-        print('hey wow')
         f.create_dataset('Br', data=Br_out)
-        print('hey poopbutt')
         f.create_dataset('dtBr', data=dtBr_out)
     print('{}/surface_timeavg saved'.format(directory))
 
