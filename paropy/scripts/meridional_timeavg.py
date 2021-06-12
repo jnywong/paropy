@@ -23,20 +23,20 @@ from paropy.data_utils import load_dimensionless
 from paropy.plot_utils import streamfunction, C_shift, merid_outline
 from paropy.routines import meridional_timeavg
 
-# matplotlib.use('Agg')  # backend for no display
+matplotlib.use('Agg')  # backend for no display
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-# run_ID  = 'ref_c'
+run_ID  = 'ref_c'
 # run_ID = 'd_0_55a'
 # run_ID = 'd_0_6a'
 # run_ID = 'd_0_65a'
-run_ID = 'c-200a'
+# run_ID = 'c-200a'
 # run_ID = 'd_0_75a'
 # run_ID = 'd_0_8a'
-# directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
-directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
+directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
+# directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 21 # no. of contour levels
@@ -46,8 +46,8 @@ Tr_min = 1.23
 lineWidth = 0.8
 
 saveOn = 1 # save figures?
-# saveDir = '/home/wongj/Work/figures/meridional'  # path to save files
-saveDir = '/Users/wongj/Documents/isterre/parody/figures/meridional'
+saveDir = '/home/wongj/Work/figures/meridional'  # path to save files
+# saveDir = '/Users/wongj/Documents/isterre/parody/figures/meridional'
 
 #%%----------------------------------------------------------------------------
 # Load data
@@ -58,15 +58,8 @@ if not os.path.exists('{}/meridional_timeavg'.format(directory)):
 else:  # load timeavg data
     print('Loading {}/meridional_timeavg'.format(directory))
     f = h5py.File('{}/meridional_timeavg'.format(directory), 'r')
-    # f.keys()
-    # theta = np.array(f['theta'])
-    # phi = np.array(f['phi'])
-    # Vt = np.array(f['Vt'])
-    # Vp = np.array(f['Vp'])
-    # Br = np.array(f['Br'])
-    # dtBr = np.array(f['dtBr'])
     for key in f.keys():
-        globals()[key] = f.create_dataset(key, f[key].shape)
+        globals()[key] = np.array(f[key])
 
 #%%----------------------------------------------------------------------------
 # Plot
@@ -78,42 +71,39 @@ spec = gridspec.GridSpec(ncols = 3, nrows = 1, figure=fig)
 ax = fig.add_subplot(spec[0,0])
 X = np.outer(np.sin(theta),radius)
 Y = np.outer(np.cos(theta),radius)
-Z = np.mean(Vp,0) # azimuthal avg
-# Z_lim = get_Z_lim(Z)
+Z = Vp
 Z_lim = Vmax
 levels = np.linspace(-Z_lim,Z_lim,n_levels)
 c = ax.contourf(X,Y,Z,levels,cmap='RdYlBu_r',extend='both')
 cbar=plt.colorbar(c,ax=ax, aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$\mathbf{u}$')
 # streamfunction
-Vr_m = np.mean(Vr,0)
-Vt_m = np.mean(Vt,0)
-Z = streamfunction(radius, theta, Vr_m, Vt_m)
-c = ax.contour(X,Y,Z, 9 , colors='grey', linewidths = lineWidth, alpha = 0.5)
+idx = np.argwhere(radius > rf)[0][0]
+Z = streamfunction(radius, theta, Vr[:,idx:], Vt[:,idx:])
+c = ax.contour(X[:,idx:],Y[:,idx:],Z[:,idx:], 9 , colors='grey', linewidths = lineWidth, alpha = 0.5)
 merid_outline(ax,radius)
 ax.axis('off')
 
 # Field
 ax = fig.add_subplot(spec[0,1])
-Z = np.mean(Bp, 0)  # azimuthal avg
+Z = Bp
 Z_lim = Bmax
 levels = np.linspace(-Z_lim,Z_lim,n_levels)
 c = ax.contourf(X,Y,Z,levels,cmap='PuOr_r',extend='both')
 cbar=plt.colorbar(c,ax=ax, aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$\mathbf{B}$')
 # poloidal
-Br_m = np.mean(Br,0)
-Bt_m = np.mean(Bt,0)
-Z = streamfunction(radius, theta, Br_m, Bt_m)
+Z = streamfunction(radius, theta, Br, Bt)
 c = ax.contour(X,Y,Z, 9 , colors='grey', linewidths = lineWidth, alpha = 0.5)
 merid_outline(ax,radius)
 ax.axis('off')
 
 # Codensity
 ax = fig.add_subplot(spec[0,2])
-Z0 = np.mean(T, 0)  # azimuthal avg
+Z0 = T
+# Z = T
 Z, levels = C_shift(radius, rf, Z0, n_levels)
-c = ax.contourf(X,Y,Z,levels,cmap='inferno') 
+c = ax.contourf(X,Y,Z,levels,extend = 'both', cmap='inferno') 
 cbar=plt.colorbar(c,ax=ax,aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$C$')
 merid_outline(ax,radius)

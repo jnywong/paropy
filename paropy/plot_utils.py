@@ -60,13 +60,14 @@ def round_down(n, decimals=0):
 def C_shift(radius, rf, Z0, n_levels, lev_min=0, lev_max=1):
     '''Normalise and shift the codensity field scale so that a < C < b -> 0 < (C - b)/h + 1 < 1'''
     idx = np.argwhere(radius > rf)[0][0]
-    if rf !=0:
-        Ts_max = np.mean(Z0[:, idx+1])  # b: max T near top of F-layer
-        Ts_min = np.mean(Z0[:, -1])  # a: min T near CMB
+    if rf !=0: 
+        # b: max T near top of F-layer
+        Ts_max = np.mean(Z0[:, idx+1]) 
+        # a: min T outside F-layer
+        Ts_min = np.min(Z0[:, idx:])
     else:
-        # round down to highlight lighter elements piling up in tangent cylinder
-        Ts_max = round_down(np.max(Z0),2)
-        Ts_min = np.min(Z0) 
+        Ts_max = np.max(Z0)
+        Ts_min = np.min(Z0)
     h = Ts_max-Ts_min
     Z1 = (Z0 - Ts_max)/h  # normalise
     Z = Z1 + lev_max

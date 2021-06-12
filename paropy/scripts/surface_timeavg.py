@@ -53,13 +53,8 @@ if not os.path.exists('{}/surface_timeavg'.format(directory)):
 else: # load timeavg data
     print('Loading {}/surface_timeavg'.format(directory))
     f = h5py.File('{}/surface_timeavg'.format(directory), 'r')
-    # print(f.keys())
-    theta = np.array(f['theta'])
-    phi = np.array(f['phi'])
-    Vt = np.array(f['Vt'])
-    Vp = np.array(f['Vp'])
-    Br = np.array(f['Br'])
-    dtBr = np.array(f['dtBr'])
+    for key in f.keys():
+        globals()[key] = np.array(f[key])
 
 #%%----------------------------------------------------------------------------
 # Plot
