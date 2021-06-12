@@ -28,9 +28,9 @@ matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID  = 'ref_c'
+# run_ID  = 'ref_c'
 # run_ID = 'd_0_55a'
-# run_ID = 'd_0_6a'
+run_ID = 'd_0_6a'
 # run_ID = 'd_0_65a'
 # run_ID = 'c-200a'
 # run_ID = 'd_0_75a'

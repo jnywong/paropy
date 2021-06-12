@@ -12,7 +12,7 @@ import math
 from scipy.integrate import cumtrapz
 
 def rad_to_deg(phi,theta):
-    '''Converts radians into longitudinal and latitudinal degrees'''
+    '''Converts radians into longitudinal and latitudinal degrees where -180 < phi_deg < 180 and -90 < theta_deg < 90 degrees'''
     i=0
     phi_deg=np.zeros(len(phi))
     
