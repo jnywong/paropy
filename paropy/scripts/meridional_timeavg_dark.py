@@ -23,7 +23,8 @@ from paropy.data_utils import load_dimensionless
 from paropy.plot_utils import streamfunction, C_shift, merid_outline
 from paropy.routines import meridional_timeavg
 
-matplotlib.use('Agg')  # backend for no display
+# matplotlib.use('Agg')  # backend for no display
+plt.style.use('dark_background')
 
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
@@ -32,9 +33,9 @@ matplotlib.use('Agg')  # backend for no display
 # run_ID = 'd_0_55a'
 # run_ID = 'd_0_6a'
 # run_ID = 'd_0_65a'
-# run_ID = 'c-200a'
+run_ID = 'c-200a'
 # run_ID = 'd_0_75a'
-run_ID = 'd_0_8a'
+# run_ID = 'd_0_8a'
 directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
 # directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
 
@@ -103,7 +104,7 @@ ax = fig.add_subplot(spec[0,2])
 Z0 = T
 # Z = T
 Z, levels = C_shift(radius, rf, Z0, n_levels)
-c = ax.contourf(X,Y,Z,levels,extend = 'both', cmap='inferno') 
+c = ax.contourf(X,Y,Z,levels,extend = 'both', cmap='YlOrRd_r') 
 cbar=plt.colorbar(c,ax=ax,aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$C$')
 merid_outline(ax,radius)
@@ -114,8 +115,8 @@ ax.axis('off')
 if saveOn==1:
     if not os.path.exists(saveDir+'/{}'.format(run_ID)):
         os.makedirs(saveDir+'/{}'.format(run_ID))
-    fig.savefig(saveDir+'/{}/meridional_timeavg.png'.format(run_ID),format='png',
+    fig.savefig(saveDir+'/{}/meridional_timeavg_dark.png'.format(run_ID),format='png',
                 dpi=200,bbox_inches='tight')
-    fig.savefig(saveDir+'/{}/meridional_timeavg.pdf'.format(run_ID), format='pdf',
+    fig.savefig(saveDir+'/{}/meridional_timeavg_dark.pdf'.format(run_ID), format='pdf',
                 dpi=200,bbox_inches='tight')
-    print('Figures saved as {}/{}/meridional_timeavg.*'.format(saveDir, run_ID))
+    print('Figures saved as {}/{}/meridional_timeavg_dark.*'.format(saveDir, run_ID))
