@@ -25,16 +25,17 @@ matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'd_0_55a' # PARODY simulation tag
-directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
-# directory = '/Users/wongj/Documents/parodydata/{}'.format(run_ID)
-timestamp = '20.26738099'
+run_ID = 'c-200a' # PARODY simulation tag
+# directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
+directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID)
+timestamp = '16.84707134'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 61 # no. of contour levels
 
-saveOn = 0 # save figures?
-saveDir = '/home/wongj/Work/figures/surface/'  # path to save files
+saveOn = 1 # save figures?
+# saveDir = '/home/wongj/Work/figures/surface/'  # path to save files
+saveDir = '/Users/wongj/Documents/isterre/parody/figures/surface'
 #%%----------------------------------------------------------------------------
 # Load data
 St_file = 'St={}.{}'.format(timestamp,run_ID)
@@ -67,10 +68,10 @@ ax.set_global()
 
 # Save
 if saveOn == 1:
-    if not os.path.exists(saveDir+'{}'.format(run_ID)):
-        os.makedirs(saveDir+'{}'.format(run_ID))
-    fig.savefig(saveDir+'{}/{}.png'.format(run_ID, timestamp), format='png',
+    if not os.path.exists(saveDir+'/{}'.format(run_ID)):
+        os.makedirs(saveDir+'/{}'.format(run_ID))
+    fig.savefig(saveDir+'/{}/{}.png'.format(run_ID, timestamp), format='png',
                 dpi=200, bbox_inches='tight')
-    fig.savefig(saveDir+'{}/{}.pdf'.format(run_ID, timestamp), format='pdf',
+    fig.savefig(saveDir+'/{}/{}.pdf'.format(run_ID, timestamp), format='pdf',
                 dpi=200, bbox_inches='tight')
-    print('Figures saved as {}{}/{}.*'.format(saveDir, run_ID, timestamp))
+    print('Figures saved as {}/{}/{}.*'.format(saveDir, run_ID, timestamp))

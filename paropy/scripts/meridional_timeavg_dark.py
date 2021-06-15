@@ -29,15 +29,16 @@ plt.style.use('dark_background')
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-# run_ID  = 'ref_c'
+# run_ID  = 'chem_200d'
+run_ID  = 'ref_c'
 # run_ID = 'd_0_55a'
 # run_ID = 'd_0_6a'
 # run_ID = 'd_0_65a'
-run_ID = 'c-200a'
+# run_ID = 'c-200a'
 # run_ID = 'd_0_75a'
 # run_ID = 'd_0_8a'
-directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
-# directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
+# directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing runs
+directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 21 # no. of contour levels
@@ -47,8 +48,8 @@ Tr_min = 1.23
 lineWidth = 0.8
 
 saveOn = 1 # save figures?
-saveDir = '/home/wongj/Work/figures/meridional'  # path to save files
-# saveDir = '/Users/wongj/Documents/isterre/parody/figures/meridional'
+# saveDir = '/home/wongj/Work/figures/meridional'  # path to save files
+saveDir = '/Users/wongj/Documents/isterre/parody/figures/meridional'
 
 #%%----------------------------------------------------------------------------
 # Load data
