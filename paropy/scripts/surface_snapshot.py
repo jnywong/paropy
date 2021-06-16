@@ -25,10 +25,12 @@ matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'c-200a' # PARODY simulation tag
+run_ID = 'd_0_55a' # PARODY simulation tag
 # directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
-directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID)
-timestamp = '16.84707134'
+# directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID)
+directory = '/Users/wongj/Desktop/data/{}'.format(run_ID)
+
+timestamp = '20.26738099'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 61 # no. of contour levels
