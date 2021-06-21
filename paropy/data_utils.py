@@ -16,7 +16,7 @@ import re
 def load_kinetic(run_ID,directory):
     '''Load e_kin.run_ID diagnostic data'''
     filename="e_kin." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["time","ke_per_unit_vol","poloidal_ke","toroidal_ke","axisymmetric_poloidal_ke","axisymmetric_toroidal_ke"]
@@ -25,7 +25,7 @@ def load_kinetic(run_ID,directory):
 def load_magnetic(run_ID,directory):
     '''Load e_mag.run_ID diagnostic data'''
     filename="e_mag." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["time","me_per_unit_vol","poloidal_me","toroidal_me","axisymmetric_poloidal_me","axisymmetric_toroidal_me"]
@@ -34,7 +34,7 @@ def load_magnetic(run_ID,directory):
 def load_nusselt(run_ID,directory):
     '''Load Nuss.run_ID diagnostic data'''
     filename="Nuss." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     # data=data.astype(dtype='float') # convert string to float
     data.columns=["time","nu1","nu2"]
@@ -43,7 +43,7 @@ def load_nusselt(run_ID,directory):
 def load_dipole(run_ID,directory):
     '''Load dipole.run_ID diagnostic data'''
     filename="dipole." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["time","dipole_colatitude","g10","g11","surface_rms_B","dipole_rms_B", "surface_rms_B_deg12"]
@@ -52,7 +52,7 @@ def load_dipole(run_ID,directory):
 def load_power(run_ID,directory):
     '''Load power.run_ID diagnostic data'''
     filename="power." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["time","available_convective_power_per_unit_vol","viscous","magnetic"]
@@ -61,7 +61,7 @@ def load_power(run_ID,directory):
 def load_scales(run_ID,directory):
     '''Load scales.run_ID diagnostic data'''
     filename="scales." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["time","mean_l_velocity","mean_l_field","mean_l_temperature", \
@@ -72,7 +72,7 @@ def load_scales(run_ID,directory):
 def load_spec_l(run_ID,directory):
     '''Load spec_l.run_ID diagnostic data'''
     filename="spec_l." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["sh_degree","spectrum_instant_velocity","spectrum_instant_field", \
@@ -82,7 +82,7 @@ def load_spec_l(run_ID,directory):
 def load_spec_m(run_ID,directory):
     '''Load spec_m.run_ID diagnostic data'''
     filename="spec_m." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["sh_order","spectrum_instant_velocity","spectrum_instant_field", \
@@ -92,7 +92,7 @@ def load_spec_m(run_ID,directory):
 def load_mantle(run_ID,directory):
     '''Load mantle.run_ID diagnostic data'''
     filename="mantle." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["time","mantle_rotation_rate","rotation_rate_on_CMB_fluid_side", \
@@ -103,7 +103,7 @@ def load_mantle(run_ID,directory):
 def load_innercore(run_ID,directory):
     '''Load innercore.run_ID diagnostic data'''
     filename="innercore." + run_ID.lower()
-    data=pd.read_csv(directory+filename,header=None,delim_whitespace=True)
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
     data.columns=["time","me_ic","poloidal","toroidal","rotation_sic", \
