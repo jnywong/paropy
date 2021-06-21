@@ -34,22 +34,21 @@ matplotlib.use('Agg')  # backend for no display
 run_ID = 'c-200a'
 # run_ID = 'd_0_75a'
 # run_ID = 'd_0_8a'
-# directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
+directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
 # directory = '/Users/wongj/Documents/parodydata/{}'.format(run_ID)
-directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
+# directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 61 # no. of contour levels
 
 saveOn = 1 # save figures?
-# saveDir = '/home/wongj/Work/figures/surface'  # path to save files
-saveDir = '/Users/wongj/Documents/Documents/isterre/parody/figures/surface'
+saveDir = '/home/wongj/Work/figures/surface'  # path to save files
+# saveDir = '/Users/wongj/Documents/isterre/parody/figures/surface'
 #%%----------------------------------------------------------------------------
 # Time average or load data if timeavg data exists
 _, _, _, _, _, fi, rf = load_dimensionless(run_ID, directory)
 if not os.path.exists('{}/surface_timeavg'.format(directory)):
     (theta, phi, Vt, Vp, Br, dtBr) = surface_timeavg(run_ID,directory) # timeavg
-    print('ich bin frei')
 else: # load timeavg data
     print('Loading {}/surface_timeavg'.format(directory))
     f = h5py.File('{}/surface_timeavg'.format(directory), 'r')
