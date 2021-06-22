@@ -67,14 +67,16 @@ w, h = plt.figaspect(fig_aspect)
 fig, ax1 = plt.subplots(1, 1, figsize=(1.5*w,h))
 ax2 = ax1.twinx()
 
-ax1.plot(rf,Rm,'o',color='tab:blue')
-ax2.plot(rf,El,'o',color='tab:orange')
+ax1.plot(rf,Rm,'o',ms=10,color='tab:blue')
+ax2.plot(rf,El,'s',ms=10,color='tab:orange')
 
 ax1.set_xlabel(r'$r_f$')
 ax1.set_ylabel(r'$Rm$')
 ax2.set_ylabel(r'$\Lambda$')
+ax1.set_ylim([700, 1100])
+ax2.set_ylim([16, 30])
 
-# Save
+#%% Save
 if saveOn == 1:
     if not os.path.exists(saveDir+'/diagnostic_parameters'):
         os.makedirs(saveDir+'/diagnostic_parameters')

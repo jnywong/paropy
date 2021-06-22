@@ -6,8 +6,10 @@ Created on Fri Jan  8 16:23:22 2021
 @author: wongj
 """
 import numpy as np
+import math
 import h5py
 
+from paropy.coreproperties import icb_radius, cmb_radius
 from paropy.data_utils import parodyload, list_Gt_files, list_St_files, surfaceload
 
 def sim_time(data):
@@ -80,6 +82,9 @@ def meridional_timeavg(run_ID, directory):
     return (radius, theta, phi, Vr_out, Vt_out, Vp_out, Br_out, Bt_out, Bp_out, T_out)
 
 def surface_timeavg(run_ID, directory):
+    '''
+    Time average surface fields
+    '''
     St_file = list_St_files(run_ID,directory) # Find all Gt_no in folder
     n = len(St_file)
 
@@ -118,3 +123,45 @@ def surface_timeavg(run_ID, directory):
 
     return (theta, phi, Vt_out, Vp_out, Br_out, dtBr_out)
 
+
+def surface_phiavg_timeavg(run_ID, directory):
+    '''
+    Time average phi averaged surface fields
+    '''
+    St_file = list_St_files(run_ID, directory)  # Find all St_no in folder
+    n = len(St_file)
+
+    # Loop over time
+    Vt_s, Vp_s, Br_s, dtBr_s = [[] for _ in range(4)]
+    i = 0
+    for file in St_file:
+        print('Loading {} ({}/{})'.format(file, i+1, n))
+        filename = '{}/{}'.format(directory, file)
+
+        (_, _, _, _, _, _, _,
+         _, _, _, _, _, _, _, _,
+            _, _, _, _, _, theta, phi, Vt, Vp, Br,
+            dtBr) = surfaceload(filename)
+        # Append
+        Vt_s.append(np.mean(Vt,axis=0))
+        Vp_s.append(np.mean(Vp,axis=0))
+        Br_s.append(np.mean(Br,axis=0))
+        dtBr_s.append(np.mean(dtBr,axis=0))
+        i += 1
+    # Time average (should really divide by dt but n is good enough according to JA)
+    Vt_out = sum(Vt_s)/n
+    Vp_out = sum(Vp_s)/n
+    Br_out = sum(Br_s)/n
+    dtBr_out = sum(dtBr_s)/n
+
+    # Save
+    with h5py.File('{}/surface_phiavg_timeavg'.format(directory), 'w') as f:
+        f.create_dataset('theta', data=theta)
+        f.create_dataset('phi', data=phi)
+        f.create_dataset('Vt', data=Vt_out)
+        f.create_dataset('Vp', data=Vp_out)
+        f.create_dataset('Br', data=Br_out)
+        f.create_dataset('dtBr', data=dtBr_out)
+    print('{}/surface_phiavg_timeavg saved'.format(directory))
+
+    return (theta, phi, Vt_out, Vp_out, Br_out, dtBr_out)

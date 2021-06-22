@@ -8,18 +8,19 @@ Created on Fri Jan  8 16:10:19 2021
 
 import numpy as np
 import math
-
 from scipy.integrate import cumtrapz
+
+from paropy.coreproperties import icb_radius, cmb_radius
 
 def rad_to_deg(phi,theta):
     '''Converts radians into longitudinal and latitudinal degrees where -180 < phi_deg < 180 and -90 < theta_deg < 90 degrees'''
-    i=0
-    phi_deg=np.zeros(len(phi))
     
+    phi_deg=np.zeros(len(phi))
+    theta_deg=np.zeros(len(theta))    
+    i=0
     for val in phi:
         phi_deg[i]=math.degrees(val)-180
         i=i+1
-    theta_deg=np.zeros(len(theta))
     i=0
     for val in theta:
         theta_deg[i]=math.degrees(val)-90
@@ -102,3 +103,22 @@ def merid_outline(ax,radius,linewidth=0.5):
 def flayer_outline(ax, rf,linewidth=0.5):
     x, y = semicircle(0, 0, rf, 1e-4)
     ax.plot(x, y, '--', lw = linewidth, color='darkgray')
+
+
+def tangent_cylinder_latitude(rf):
+    shell_gap = cmb_radius - icb_radius
+    if rf == 0:
+        ri = icb_radius/cmb_radius
+        tc_lat = 90 - (np.pi/2-math.acos(ri))*180/np.pi
+    else:
+        tc_lat = 90 - (np.pi/2-math.acos(rf*shell_gap/cmb_radius))*180/np.pi
+    return tc_lat
+
+def polar_minimum_latitude(theta,Br):
+    idx_north = np.where(Br == np.max(Br[theta < np.pi/2]))[0][0]
+    idx_south = np.where(Br == np.min(Br[theta > np.pi/2]))[0][0]
+    # Convert to latitude
+    pm_lat_north = 90 - theta[idx_north]*180/np.pi
+    pm_lat_south = 90 - theta[idx_south]*180/np.pi
+
+    return pm_lat_north, pm_lat_south

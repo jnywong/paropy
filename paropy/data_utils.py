@@ -11,6 +11,7 @@ import numpy as np
 import os
 import re
 
+from paropy.coreproperties import icb_radius, cmb_radius
 #------------------------------------------------------------------------------
 # Diagnostics
 def load_kinetic(run_ID,directory):
@@ -301,7 +302,8 @@ def load_dimensionless(run_ID, directory):
         rstrat = final_list[6][0]
         fi = final_list[5][0]/100  # divide percentage by 100
     except IndexError:  # for runs with no stratification
-        rstrat = 0
+        shell_gap = cmb_radius - icb_radius
+        rstrat = icb_radius/shell_gap
         fi = 0
 
     return (NR, Ek, Ra, Pr, Pm, fi, rstrat)

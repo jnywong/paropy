@@ -83,8 +83,6 @@ c = ax.contourf(X, Y, Z, levels, transform=ccrs.PlateCarree(),
 if saveOn == 1:
     if not os.path.exists(saveDir+'{}'.format(run_ID)):
         os.makedirs('{}/{}'.format(saveDir,run_ID))
-    fig.savefig('{}/{}/test.png'.format(saveDir, run_ID), format='png',
-                dpi=200, bbox_inches='tight')
-#     fig.savefig(saveDir+'{}/{}.pdf'.format(run_ID, timestamp), format='pdf',
-#                 dpi=200, bbox_inches='tight')
-    print('Figures saved as {}/{}/test.*'.format(saveDir, run_ID))
+    fig.savefig('{}/{}/surface_timeavg.png'.format(saveDir, run_ID), format='png', dpi=200, bbox_inches='tight')
+    fig.savefig('{}/{}/surface_timeavg.pdf'.format(saveDir, run_ID), format='pdf', dpi=200, bbox_inches='tight')
+    print('Figures saved as {}/{}/surface_timeavg.*'.format(saveDir, run_ID))
