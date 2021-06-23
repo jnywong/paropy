@@ -9,8 +9,9 @@ import numpy as np
 import math
 import h5py
 
+from scipy.integrate import trapz, cumtrapz
 from paropy.coreproperties import icb_radius, cmb_radius
-from paropy.data_utils import parodyload, list_Gt_files, list_St_files, surfaceload
+from paropy.data_utils import load_dimensionless, parodyload, list_Gt_files, list_St_files, surfaceload
 
 def sim_time(data):
     '''Total simulation time (viscous) from diagnostic data'''
@@ -165,3 +166,58 @@ def surface_phiavg_timeavg(run_ID, directory):
     print('{}/surface_phiavg_timeavg saved'.format(directory))
 
     return (theta, phi, Vt_out, Vp_out, Br_out, dtBr_out)
+
+def convective_power_timeavg(run_ID, directory):
+    Gt_file = list_Gt_files(run_ID, directory)  # Find all Gt_no in folder
+    n = len(Gt_file)
+
+    # Loop over time
+    Vr_avg, T_avg = [[] for _ in range(2)]
+    i = 0
+    for file in Gt_file:
+        print('Loading {} ({}/{})'.format(file, i+1, n))
+        filename = '{}/{}'.format(directory, file)
+        (_, _, _, _, _, _, _,
+            _, _, _, _, _, _, _, _,
+            _, _, _, _, radius, theta, phi, Vr, _, _,
+            _, _, _, T) = parodyload(filename)
+        # Integrate over phi and theta
+        Vr_avg.append(trapz(trapz(Vr,phi,axis=0)*np.sin(theta),theta,axis=0))
+        T_avg.append(trapz(trapz(T, phi, axis=0)*np.sin(theta), theta, axis=0))
+        i += 1
+    # Time average (should really divide by dt but n is good enough according to JA)
+    Vr_out = sum(Vr_avg)/n
+    T_out = sum(T_avg)/n
+
+    # Save
+    with h5py.File('{}/convective_power'.format(directory), 'a') as f:
+        f.create_dataset('radius', data=radius)
+        f.create_dataset('Vr', data=Vr_out)
+        f.create_dataset('T', data=T_out)
+
+    return radius, Vr_out, T_out
+
+def ref_codensity(r,rf,fi):
+    '''
+    Compute reference codensity
+    '''
+    nr = r.size
+    shell_gap = cmb_radius-icb_radius
+    ro = cmb_radius/shell_gap
+    ri = icb_radius/shell_gap
+    idx_f = np.where(r<rf)
+    idx_o = np.where(r>=rf)
+
+    if fi<0:
+        So = -3/(ro**3-rf**3)
+        Sf = 3*(1-fi)/(rf**3-ri**3)
+        dCodr = So*(ro**3 - r[idx_o]**3)/(3*r[idx_o]**2)
+        dCfdr = -Sf*(r[idx_f]**3-ri**3)/(3*r[idx_f]**2) - fi/r[idx_f]**2
+
+        alpha = -(ro**3/rf+rf**2/2)/(ro**3 - rf**3) - \
+            (1-fi)*(rf**2/2 + ri**3/rf)/(rf**3-ri**3) + fi/rf
+        Co = (ro**3/r[idx_o] + r[idx_o]**2/2)/(ro**3 - rf**3) + alpha
+        Cf = - (1-fi)*(r[idx_f]**2/2 + ri**3/r[idx_f])/(rf**3 - ri**3) + fi/r[idx_f]
+        C = np.concatenate([Cf, Co])
+
+    return C
