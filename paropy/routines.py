@@ -113,7 +113,7 @@ def surface_timeavg(run_ID, directory):
     dtBr_out = sum(dtBr_s)/n
 
     # Save 
-    with h5py.File('{}/surface_timeavg'.format(directory), 'w') as f:
+    with h5py.File('{}/surface_timeavg'.format(directory), 'a') as f:
         f.create_dataset('theta', data=theta)
         f.create_dataset('phi', data=phi)
         f.create_dataset('Vt', data=Vt_out)

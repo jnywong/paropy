@@ -61,27 +61,24 @@ w, h = plt.figaspect(fig_aspect)
 fig, ax = plt.subplots(1, 1, figsize=(1.5*w,h), 
                        subplot_kw={'projection': ccrs.Mollweide()})
 X,Y = rad_to_deg(phi, theta)
-# phi, theta = np.meshgrid(X,Y)
 Z = Br.T
 Z_lim = get_Z_lim(Z)
 levels = np.linspace(-Z_lim,Z_lim,n_levels)
 
-# c = ax.contourf(phi, theta, Z, cmap='PuOr_r')
 c = ax.contourf(X, Y, Z, levels, transform=ccrs.PlateCarree(),
                 extend='both', cmap='PuOr_r')
-# cbar_ax = fig.add_axes([0.2,0.06,0.6,0.04])
-# cbar = fig.colorbar(c, cax=cbar_ax, orientation='horizontal')
-# cbar.set_ticks([-Z_lim,-Z_lim/2,0,Z_lim/2,Z_lim])
-# cbar.ax.set_xlabel(r'$B_{r}$',fontsize=12)
-# cbar.ax.tick_params(labelsize=12)
-# cbar.ax.tick_params(length=6)
-# ax.gridlines()
-# ax.set_global()
-# print('sup')
+cbar_ax = fig.add_axes([0.2,0.06,0.6,0.04])
+cbar = fig.colorbar(c, cax=cbar_ax, orientation='horizontal')
+cbar.set_ticks([-Z_lim,-Z_lim/2,0,Z_lim/2,Z_lim])
+cbar.ax.set_xlabel(r'$B_{r}$',fontsize=12)
+cbar.ax.tick_params(labelsize=12)
+cbar.ax.tick_params(length=6)
+ax.gridlines()
+ax.set_global()
 
 # Save
 if saveOn == 1:
-    if not os.path.exists(saveDir+'{}'.format(run_ID)):
+    if not os.path.exists('{}/{}'.format(saveDir,run_ID)):
         os.makedirs('{}/{}'.format(saveDir,run_ID))
     fig.savefig('{}/{}/surface_timeavg.png'.format(saveDir, run_ID), format='png', dpi=200, bbox_inches='tight')
     fig.savefig('{}/{}/surface_timeavg.pdf'.format(saveDir, run_ID), format='pdf', dpi=200, bbox_inches='tight')
