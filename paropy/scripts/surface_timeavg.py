@@ -23,7 +23,7 @@ from paropy.data_utils import load_dimensionless
 from paropy.plot_utils import rad_to_deg, get_Z_lim
 from paropy.routines import surface_timeavg
 
-matplotlib.use('Agg')  # backend for no display
+# matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%

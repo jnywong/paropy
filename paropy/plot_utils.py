@@ -7,6 +7,7 @@ Created on Fri Jan  8 16:10:19 2021
 """
 
 import numpy as np
+import scipy.special as sp
 import math
 from scipy.integrate import cumtrapz
 
@@ -25,19 +26,13 @@ def rad_to_deg(phi,theta):
     for val in theta:
         theta_deg[i]=math.degrees(val)-90
         i=i+1    
-    # phi, theta = np.meshgrid(phi_degree, theta_degree) # indexing='xy')
     
     return (phi_deg, theta_deg)
 
-def get_Z_lim(Z):
-    '''Choose Z limit for plot to the nearest sig. fig. modulo 5'''
-    Z_lim = np.max([np.abs(Z.min()),np.abs(Z.max())])
-    index = np.ceil(-np.log10(Z_lim))
-    modulo = Z_lim % (5*10**(-index))
-    if modulo!=Z_lim:
-        Z_lim = Z_lim - (Z_lim % (5*10**(-index)))
-    else:
-        Z_lim = np.round(Z_lim, index)
+def get_Z_lim(Z,dp=1):
+    '''Choose Z limit for plot to dp decimal places'''
+    Z_lim = np.max(np.abs(Z))
+    Z_lim = np.round(Z_lim, dp)
 
     return Z_lim        
     
@@ -122,3 +117,4 @@ def polar_minimum_latitude(theta,Br):
     pm_lat_south = 90 - theta[idx_south]*180/np.pi
 
     return pm_lat_north, pm_lat_south
+
