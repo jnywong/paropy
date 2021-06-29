@@ -9,7 +9,7 @@ Python version of PARODY-JA4.3 Matlab file 'Matlab/surfaceload_v4.m'.
 
 Loads core surface data and plots core surface field snapshot.
 
-ATTENTION: Folder structure should be of the form `<folder>/<run_ID>/Gt_*.run_ID`
+ATTENTION: Folder structure from simulation output should be of the form `<folder>/<run_ID>/Gt_*.run_ID`
 """
 
 import os
