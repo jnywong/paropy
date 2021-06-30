@@ -6,13 +6,12 @@ Created on Fri Jan  8 16:23:22 2021
 @author: wongj
 """
 import numpy as np
-import scipy.special as sp
-import math
+import shtns
 import h5py
 
-from scipy.integrate import trapz, cumtrapz
+from scipy.integrate import trapz
 from paropy.coreproperties import icb_radius, cmb_radius
-from paropy.data_utils import load_dimensionless, parodyload, list_Gt_files, list_St_files, surfaceload
+from paropy.data_utils import parodyload, list_Gt_files, list_St_files, surfaceload
 
 def sim_time(data):
     '''Total simulation time (viscous) from diagnostic data'''
@@ -222,3 +221,14 @@ def ref_codensity(r,rf,fi):
         C = np.concatenate([Cf, Co])
 
     return C
+
+def filter_field(Br,nphi,ntheta,l_trunc):
+    m_max = l_trunc
+    sh = shtns.sht(l_trunc, m_max)
+    # default 'flag = sht_quick_init' uses gaussian grid
+    nlat, nlon = sh.set_grid(nphi=nphi, nlat=ntheta)
+    # NOTE: array has to be dtype='float64' and not 'float32'
+    vr = Br.T.astype('float64')
+    coeff = sh.analys(vr)  # spatial to spectral
+    Br_f = sh.synth(coeff)  # spectral to spatial
+    return Br_f

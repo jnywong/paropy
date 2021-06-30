@@ -21,19 +21,19 @@ import cartopy.crs as ccrs
 from paropy.data_utils import surfaceload
 from paropy.plot_utils import rad_to_deg, get_Z_lim
 
-# matplotlib.use('Agg')  # backend for no display
+matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'c-200a' # PARODY simulation tag
+run_ID = 'chem_200d' # PARODY simulation tag
 directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
 # directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID)
 # directory = '/Users/wongj/Desktop/data/{}'.format(run_ID)
 
-timestamp = '16.84707134'
+timestamp = '6.648476379'
 
 fig_aspect = 1 # figure aspect ratio
-n_levels = 61 # no. of contour levels
+n_levels = 60 # no. of contour levels
 
 saveOn = 1 # save figures?
 saveDir = '/home/wongj/Work/figures/surface'  # path to save files
