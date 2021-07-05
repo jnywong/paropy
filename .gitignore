@@ -1,5 +1,7 @@
 *.DS_Store
 paropy/scripts/SHT_example.py
+paropy/scripts/SHT*.py
+paropy/scripts/test*.py
 
 # VS Code
 **/.vscode

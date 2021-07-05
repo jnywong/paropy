@@ -6,7 +6,6 @@ Use SHTns library to filter core surface magnetic field
 
 import os
 import numpy as np
-import shtns
 import matplotlib
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
@@ -25,7 +24,7 @@ l_max = 133 # max. spherical harmonic degree from simulation
 l_trunc = 14 # SH degree truncation
 
 fig_aspect = 1  # figure aspect ratio
-n_levels = 57  # no. of contour levels
+n_levels = 30  # no. of contour levels
 
 saveOn = 1  # save figures?
 saveDir = '/home/wongj/Work/figures/filter_surface_field'  # path to save files
@@ -52,7 +51,7 @@ for run in run_ID:
     #%% Plot
     X, Y = rad_to_deg(phi, theta)
     Z_lim = get_Z_lim(Br_f)
-    levels = np.linspace(-Z_lim, Z_lim, n_levels)
+    levels = np.linspace(-Z_lim, Z_lim, n_levels) # NOTE: bug with cartopy contours, try different n_levels
     c = axs[2*i].contourf(X, Y, Br.T, levels, transform=ccrs.PlateCarree(), cmap='PuOr_r',
                     extend='both')
     c_f = axs[2*i+1].contourf(X, Y, Br_f, levels, transform=ccrs.PlateCarree(), cmap='PuOr_r',
@@ -62,7 +61,6 @@ for run in run_ID:
     axs[2*i+1].gridlines()
     axs[2*i+1].set_global()    
 
-    # cbar_ax = fig.add_axes([0.2, 0.06, 0.6, 0.04])
     #get size and extent of axes:
     axpos = axs[2*i+1].get_position()
     pos_x = axpos.x0+axpos.width + 0.06# + 0.25*axpos.width
@@ -72,7 +70,6 @@ for run in run_ID:
     #create new axes where the colorbar should go.
     #it should be next to the original axes and have the same height!
     cbar_ax = fig.add_axes([pos_x,pos_y,cax_width,cax_height])
-    # cbar_ax = fig.add_axes([0, 0, 0.1, 0.1])
     cbar = fig.colorbar(c, cax=cbar_ax, orientation='vertical')
     cbar.set_ticks([-Z_lim, -Z_lim/2, 0, Z_lim/2, Z_lim])
     cbar.ax.set_xlabel(r'$B_{r}$', fontsize=12, labelpad=5, y=0.5)

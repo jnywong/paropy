@@ -15,19 +15,33 @@ from paropy.coreproperties import icb_radius, cmb_radius
 
 def rad_to_deg(phi,theta):
     '''Converts radians into longitudinal and latitudinal degrees where -180 < phi_deg < 180 and -90 < theta_deg < 90 degrees'''
-    
-    phi_deg=np.zeros(len(phi))
-    theta_deg=np.zeros(len(theta))    
+    lon=np.zeros(len(phi))
+    lat=np.zeros(len(theta))    
     i=0
     for val in phi:
-        phi_deg[i]=math.degrees(val)-180
+        lon[i]=math.degrees(val)-180
         i=i+1
     i=0
     for val in theta:
-        theta_deg[i]=math.degrees(val)-90
+        lat[i]=math.degrees(val)-90
         i=i+1    
     
-    return (phi_deg, theta_deg)
+    return (lon, lat)
+
+def deg_to_rad(lon, lat):
+    '''Converts longitudinal and latitudinal degrees where -180 < phi_deg < 180 and -90 < theta_deg < 90 degrees into radians'''
+    phi = np.zeros(len(lon))
+    theta = np.zeros(len(lat))
+    i = 0
+    for val in lon:
+        phi[i] = math.radians(val)+np.pi
+        i = i+1
+    i = 0
+    for val in lat:
+        theta[i] = math.radians(val)+np.pi/2
+        i = i+1
+
+    return (phi, theta)
 
 def get_Z_lim(Z,dp=1):
     '''Choose Z limit for plot to dp decimal places'''
@@ -110,6 +124,9 @@ def tangent_cylinder_latitude(rf):
     return tc_lat
 
 def polar_minimum_latitude(theta,Br):
+    '''
+    Maximum (minimum) Br in each hemisphere
+    '''
     idx_north = np.where(Br == np.max(Br[theta < np.pi/2]))[0][0]
     idx_south = np.where(Br == np.min(Br[theta > np.pi/2]))[0][0]
     # Convert to latitude

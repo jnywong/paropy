@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(name='paropy',
-      version='0.0.5', 
+      version='0.0.6', 
       description='Python package to process data from PARODY-JA4.3 dynamo simulations.',
       long_description=long_description,
       long_description_content_type="text/markdown",
@@ -15,7 +15,7 @@ setup(name='paropy',
       author_email='jenny.wong@univ-grenoble-alpes.fr',
       license='MIT',
       packages=['paropy'],
-      package_data={'paropy': ['scripts/*.py']},
+      package_data={'paropy': ['scripts/*.py', 'data/CHAOS-7.7.mat']},
       setup_requires=["numpy"],
-      install_requires=['pytest','pandas','matplotlib','scipy','proj','pyshp','geos','shapely','cartopy'],
+      install_requires=['pytest','pandas','matplotlib','scipy','proj','pyshp','geos','shapely','cartopy','h5py','chaosmagpy'],
       )

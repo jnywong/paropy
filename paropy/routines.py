@@ -6,6 +6,7 @@ Created on Fri Jan  8 16:23:22 2021
 @author: wongj
 """
 import numpy as np
+import chaosmagpy as cp
 import shtns
 import h5py
 
@@ -44,19 +45,12 @@ def meridional_timeavg(run_ID, directory):
             Br, Bt, Bp, T) = parodyload(filename)
         # Zonal averages
         Vr_m.append(np.mean(Vr,axis=0))
-        # print('1')
         Vt_m.append(np.mean(Vt, axis=0))
-        # print('2')
         Vp_m.append(np.mean(Vp,axis=0))
-        # print('3')
         Br_m.append(np.mean(Br,axis=0))
-        # print('4')
         Bt_m.append(np.mean(Bt, axis=0))
-        # print('5')
         Bp_m.append(np.mean(Bp,axis=0))
-        # print('6')
         T_m.append(np.mean(T,axis=0))
-        # print('7')
         i += 1
     # Time average (should really divide by dt but n is good enough according to JA)
     Vr_out = sum(Vr_m)/n
@@ -106,7 +100,7 @@ def surface_timeavg(run_ID, directory):
         Br_s.append(Br)
         dtBr_s.append(dtBr)
         i += 1
-    # Time average (should really divide by dt but n is good enough according to JA)
+    # Time average (should really divide by dt but n is good enough)
     Vt_out = sum(Vt_s)/n
     Vp_out = sum(Vp_s)/n
     Br_out = sum(Br_s)/n
@@ -149,7 +143,7 @@ def surface_phiavg_timeavg(run_ID, directory):
         Br_s.append(np.mean(Br,axis=0))
         dtBr_s.append(np.mean(dtBr,axis=0))
         i += 1
-    # Time average (should really divide by dt but n is good enough according to JA)
+    # Time average (should really divide by dt but n is good enough)
     Vt_out = sum(Vt_s)/n
     Vp_out = sum(Vp_s)/n
     Br_out = sum(Br_s)/n
@@ -166,6 +160,27 @@ def surface_phiavg_timeavg(run_ID, directory):
     print('{}/surface_phiavg_timeavg saved'.format(directory))
 
     return (theta, phi, Vt_out, Vp_out, Br_out, dtBr_out)
+
+def CHAOS_phiavg_timeavg(nphi, ntheta, lmax, yearStart, yearEnd, n, radius=3485):
+    model = cp.load_CHAOS_matfile('../data/CHAOS-7.7.mat')
+    time = np.linspace(yearStart, yearEnd, n)
+    time_chaos = np.array([cp.data_utils.dyear_to_mjd(x) for x in time]) # modified Julian date
+    # create grid
+    latC = np.linspace(0.01, 179.99, num=ntheta)  # colatitude in degrees
+    lonC = np.linspace(-179.99, 179.99, num=nphi)  # longitude in degrees
+    Br_avg = []
+    for t in time_chaos:
+        print('Loading CHAOS time {:.2f}'.format(t))
+        # ylm = model.synth_coeffs_tdep(t)
+        # dtglm = model.synth_coeffs_tdep(t, deriv=1)  # Secular Variation
+        Br, _, _ = model.synth_values_tdep(
+            t, radius, latC, lonC, nmax=lmax, deriv=0, grid=True)  # (nT)
+        BrC = trapz(Br, lonC, axis=1) # phi average
+        Br_avg.append(BrC)
+    Br_out = sum(Br_avg)/n
+    latC = 90-latC # NOTE: 0<theta<180 to read data but -90<theta<90 to plot
+
+    return (latC, lonC, Br_out)
 
 def convective_power_timeavg(run_ID, directory):
     Gt_file = list_Gt_files(run_ID, directory)  # Find all Gt_no in folder
@@ -185,7 +200,7 @@ def convective_power_timeavg(run_ID, directory):
         Vr_avg.append(trapz(trapz(Vr,phi,axis=0)*np.sin(theta),theta,axis=0))
         T_avg.append(trapz(trapz(T, phi, axis=0)*np.sin(theta), theta, axis=0))
         i += 1
-    # Time average (should really divide by dt but n is good enough according to JA)
+    # Time average (should really divide by dt but n is good enough)
     Vr_out = sum(Vr_avg)/n
     T_out = sum(T_avg)/n
 
@@ -232,3 +247,4 @@ def filter_field(Br,nphi,ntheta,l_trunc):
     coeff = sh.analys(vr)  # spatial to spectral
     Br_f = sh.synth(coeff)  # spectral to spatial
     return Br_f
+
