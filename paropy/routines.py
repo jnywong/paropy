@@ -194,23 +194,53 @@ def convective_power_timeavg(run_ID, directory):
         filename = '{}/{}'.format(directory, file)
         (_, _, _, _, _, _, _,
             _, _, _, _, _, _, _, _,
-            _, _, _, _, radius, theta, phi, Vr, _, _,
+            nr, ntheta, nphi, _, radius, theta, phi, Vr, _, _,
             _, _, _, T) = parodyload(filename)
         # Integrate over phi and theta
-        Vr_avg.append(trapz(trapz(Vr,phi,axis=0)*np.sin(theta),theta,axis=0))
-        T_avg.append(trapz(trapz(T, phi, axis=0)*np.sin(theta), theta, axis=0))
+        mr, mdr, msint, mcost, mdt, mdp = initialise_dV(
+            nphi, ntheta, nr, phi, theta, radius)
+        dV = mr**2*mdr*mdt*msint*mdp
+        A = mr*Vr*T
+        I = np.sum(np.sum(A*dV, axis=1), axis=0) / \
+            np.sum(np.sum(dV, axis=0), axis=1)
         i += 1
     # Time average (should really divide by dt but n is good enough)
-    Vr_out = sum(Vr_avg)/n
-    T_out = sum(T_avg)/n
-
+    I_out = np.sum(I)/n
     # Save
     with h5py.File('{}/convective_power'.format(directory), 'a') as f:
         f.create_dataset('radius', data=radius)
-        f.create_dataset('Vr', data=Vr_out)
-        f.create_dataset('T', data=T_out)
+        f.create_dataset('I_out', data=I_out)
 
-    return radius, Vr_out, T_out
+    return radius, I_out
+
+def initialise_dV(nphi,ntheta,nr,phi,theta,r):
+    '''
+    Prepare grid for integration in spherical coordinates
+    '''
+    mr = np.ones([nphi, ntheta, nr])
+    mdr = np.ones([nphi, ntheta, nr])
+    gr = np.gradient(r)
+    for i in range(nr):
+        mr[: , : , i] = r[i]
+        mdr[: , : , i] = gr[i]
+
+    gt = np.gradient(theta)
+    msint = np.ones([nphi, ntheta, nr])
+    mcost = np.ones([nphi, ntheta, nr])
+    mdt = np.ones([nphi, ntheta, nr])
+    sint = np.array([np.sin(x) for x in theta])
+    cost = np.array([np.cos(x) for x in theta])
+    for i in range(ntheta):
+        msint[: , i, : ] = sint[i]
+        mcost[: , i, : ] = cost[i]
+        mdt[: , i, : ] = gt[i]
+
+    mdp = np.ones([nphi, ntheta, nr])
+    gp = np.gradient(phi)
+    for i in range(nphi):
+        mdp[i, : , : ] = gp[i]
+
+    return mr, mdr, msint, mcost, mdt, mdp
 
 def ref_codensity(r,rf,fi):
     '''
@@ -238,11 +268,10 @@ def ref_codensity(r,rf,fi):
     return C
 
 def filter_field(Br,nphi,ntheta,l_trunc):
+    '''Use SHTns to truncate field to degree l_trunc'''
     m_max = l_trunc
-    sh = shtns.sht(l_trunc, m_max)
-    # default 'flag = sht_quick_init' uses gaussian grid
-    nlat, nlon = sh.set_grid(nphi=nphi, nlat=ntheta)
-    # NOTE: array has to be dtype='float64' and not 'float32'
+    sh = shtns.sht(l_trunc, m_max) # by default 'flag = sht_quick_init' uses gaussian grid
+    nlat, nlon = sh.set_grid(nphi=nphi, nlat=ntheta) # NOTE: array has to be dtype='float64' and not 'float32'
     vr = Br.T.astype('float64')
     coeff = sh.analys(vr)  # spatial to spectral
     Br_f = sh.synth(coeff)  # spectral to spatial
