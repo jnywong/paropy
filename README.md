@@ -1,6 +1,6 @@
 # paropy
 
-Python package to process data from PARODY-JA4.3 dynamo simulations.
+Welcome! Here is my Python package to process data from PARODY-JA4.3 dynamo simulations with a stably-stratified F-layer at the base of the outer core. 
 
 ## Getting Started
 
