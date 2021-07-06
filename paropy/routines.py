@@ -187,7 +187,8 @@ def convective_power_timeavg(run_ID, directory):
     n = len(Gt_file)
 
     # Loop over time
-    Vr_avg, T_avg = [[] for _ in range(2)]
+    # Vr_avg, T_avg = [[] for _ in range(2)]
+    I_avg = []
     i = 0
     for file in Gt_file:
         print('Loading {} ({}/{})'.format(file, i+1, n))
@@ -203,13 +204,14 @@ def convective_power_timeavg(run_ID, directory):
         A = mr*Vr*T
         I = np.sum(np.sum(A*dV, axis=1), axis=0) / \
             np.sum(np.sum(dV, axis=0), axis=1)
+        I_avg.append(I)
         i += 1
     # Time average (should really divide by dt but n is good enough)
-    I_out = np.sum(I)/n
+    I_out = sum(I_avg)/n
     # Save
     with h5py.File('{}/convective_power'.format(directory), 'a') as f:
         f.create_dataset('radius', data=radius)
-        f.create_dataset('I_out', data=I_out)
+        f.create_dataset('I', data=I_out)
 
     return radius, I_out
 

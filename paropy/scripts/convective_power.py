@@ -22,16 +22,10 @@ from paropy.routines import convective_power_timeavg, ref_codensity
 # matplotlib.use('Agg')  # backend for no display
 plt.close('all')
 #%% INPUT PARAMETERS
-# run_ID  = 'ref_c'
-# run_ID = 'd_0_55a'
-# run_ID = 'd_0_6a'
-# run_ID = 'd_0_65a'
-run_ID = 'c-200a'
-# run_ID = 'd_0_75a'
-# run_ID = 'd_0_8a'
-# path containing runs
-directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID)
-# directory = '/Volumes/NAS/ipgp/Work/{}'.format(run_ID)
+run_ID = ['chem_200d', 'd_0_55a', 'd_0_6a', 'd_0_65b',
+          'c-200a', 'd_0_75a', 'd_0_8a']  # PARODY simulation tag
+# path containing simulation output
+dirName = '/data/geodynamo/wongj/Work'
 
 fig_aspect = 1  # figure aspect ratio
 
@@ -41,30 +35,48 @@ saveDir = '/home/wongj/Work/figures/convective_power'  # path to save files
 
 #%%----------------------------------------------------------------------------
 # Load data
-(NR, Ek, Ra, Pr, Pm, fi, rf) = load_dimensionless(run_ID, directory)
-if not os.path.exists('{}/convective_power'.format(directory)):
-    (radius, I) = convective_power_timeavg(run_ID, directory)  # timeavg
-else:  # load timeavg data
-    print('Loading {}/convective_power'.format(directory))
-    f = h5py.File('{}/convective_power'.format(directory), 'r')
-    for key in f.keys():
-        globals()[key] = np.array(f[key])
-# Check with diagnostics
-df_power = load_power(run_ID,directory)
-check_diag = df_power["available_convective_power_per_unit_vol"].mean()
+shell_gap = cmb_radius - icb_radius
+ri = icb_radius/shell_gap
 
-ro = radius[-1]
-convective_power = Ra*I/(Ek*radius[-1])
-#%%----------------------------------------------------------------------------
-# Plot
 w, h = plt.figaspect(fig_aspect)
-# fig1, (ax1a,ax1b) = plt.subplots(2, 1, figsize=(1.5*w, h),sharex=True)
 fig1, ax1 = plt.subplots(1, 1, figsize=(1.5*w, h))
-ax1.plot(radius, convective_power)
-# ax1b.plot(radius, Tvar)
+ax1.axhline(0,linestyle='--',color='k')
 
-# fig2, (ax2a, ax2b) = plt.subplots(2, 1, figsize=(1.5*w, h), sharex=True)
-# ax2a.plot(radius, T)
-# ax2b.plot(radius, Tref)
+i=0
+for run in run_ID:
+    directory = '/data/geodynamo/wongj/Work/{}'.format(run)
+    (NR, Ek, Ra, Pr, Pm, fi, rf) = load_dimensionless(run, directory)
+    if not os.path.exists('{}/convective_power'.format(directory)):
+        (radius, I) = convective_power_timeavg(run, directory)  # timeavg
+    else:  # load timeavg data
+        print('Loading {}/convective_power'.format(directory))
+        f = h5py.File('{}/convective_power'.format(directory), 'r')
+        for key in f.keys():
+            globals()[key] = np.array(f[key])
+    # Check with diagnostics
+    df_power = load_power(run,directory)
+    check_diag = df_power["available_convective_power_per_unit_vol"].mean()
 
-plt.show()
+    ro = radius[-1]
+    convective_power = Ra*I/(Ek*radius[-1])
+
+    # Plot
+    if rf==ri:
+        ax1.plot(radius, convective_power, lw = 2, label=r'$r_f$ = {:.2f}'.format(rf), color='black')
+    else:
+        ax1.plot(radius, convective_power, lw = 2, label=r'$r_f$ = {:.2f}'.format(rf))
+    i+=1
+
+ax1.set_xlabel(r'$r_f$')
+ax1.set_ylabel(r'$\mathcal{P}$')
+plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
+ax1.legend(loc='lower right')
+
+if saveOn == 1:
+    if not os.path.exists('{}'.format(saveDir)):
+        os.makedirs('{}'.format(saveDir))
+    fig1.savefig('{}/compare_rf.png'.format(saveDir),
+                format='png', dpi=200, bbox_inches='tight')
+    fig1.savefig('{}/compare_rf.pdf'.format(saveDir),
+                format='pdf', dpi=200, bbox_inches='tight')
+    print('Figures saved as {}/compare_rf.*'.format(saveDir))
