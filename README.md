@@ -92,6 +92,7 @@ saveDir = <path_to_savefigs>
 ```
 run_ID, timestamp = 'c-200a', '16.84707134'
 directory = <path_to_data>
+saveDir = <path_to_savefigs>
 ```
 
 3. Run `paropy/scripts/meridional_snapshot.py`
@@ -109,6 +110,7 @@ directory = <path_to_data>
 ```
 run_ID, timestamp = 'c-200a', '16.84707134'
 directory = <path_to_data>
+saveDir = <path_to_savefigs>
 ```
 
 3. Run `paropy/scripts/surface_snapshot.py`
