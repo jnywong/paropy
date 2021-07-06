@@ -9,7 +9,7 @@ Python version of PARODY-JA4.3 Matlab file 'Matlab/surfaceload_v4.m'.
 
 Loads core surface data and plots core surface field snapshot.
 
-ATTENTION: Folder structure should be of the form `<folder>/<run_ID>/Gt_*.run_ID`
+ATTENTION: Folder structure should be of the form `<folder>/<run_ID>/St_*.run_ID`
 """
 
 import os
@@ -25,12 +25,10 @@ matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'chem_200d' # PARODY simulation tag
+run_ID, timestamp = 'c-200a', '16.84707134'
 directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
 # directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID)
 # directory = '/Users/wongj/Desktop/data/{}'.format(run_ID)
-
-timestamp = '6.648476379'
 
 fig_aspect = 1 # figure aspect ratio
 n_levels = 60 # no. of contour levels
