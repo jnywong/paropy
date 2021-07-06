@@ -1,3 +1,6 @@
+[![PyPI version](https://badge.fury.io/py/paropy.svg)](https://badge.fury.io/py/paropy)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # paropy
 
 Welcome! Here is my Python package to process data from PARODY-JA4.3 dynamo simulations with a stably-stratified F-layer at the base of the outer core. 
