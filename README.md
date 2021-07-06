@@ -5,7 +5,7 @@ Python package to process data from PARODY-JA4.3 dynamo simulations.
 ## Getting Started
 
 ### Prerequisites
-- [Python](https://www.python.org/)
+- [Python3](https://www.python.org/)
 
 ### Installing
 Conda:
@@ -18,11 +18,11 @@ Pip:
 pip install paropy
 ```
 
-Git:
+Git: 
 
 Find the Git repo [here](https://github.com/jnywong/nondim-slurry).
 
-##### IPython issue
+#### IPython issue
 Please note that ipython may not be compatible with jedi release 0.18.0. Please revert to version 0.17.2 for auto-complete features to work (see [here](https://github.com/ipython/ipython/issues/12740)).
 
 ## Package structure
@@ -37,9 +37,20 @@ paropy/
     plot_utils.py
     routines.py
     scripts/
+      convective_power.py
       diagnostics.py
+      diagnostic_parameters.py
+      filter_surface_field.py
+      latitude_vs_Br.py
+      latitude_vs_Br_with_CHAOS.py
       meridional_snapshot.py
+      meridional_timeavg.py
+      rotation_rate.py
       surface_snapshot.py
+      surface_timeavg.py
+
+    data/
+      CHAOS-7.7.mat
   setup.py
 ```
 
