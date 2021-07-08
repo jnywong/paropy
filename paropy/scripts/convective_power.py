@@ -10,13 +10,13 @@ import os
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
+from matplotlib import ticker
 import h5py
 from numpy.lib.function_base import trapz
 
 from paropy.coreproperties import icb_radius, cmb_radius
 from paropy.data_utils import load_dimensionless, load_power
-from paropy.plot_utils import streamfunction, C_shift, merid_outline
+from paropy.plot_utils import streamfunction, C_shift, merid_outline, y_axis_sci
 from paropy.routines import convective_power_timeavg, ref_codensity
 
 # matplotlib.use('Agg')  # backend for no display
@@ -61,16 +61,16 @@ for run in run_ID:
     convective_power = Ra*I/(Ek*radius[-1])
 
     # Plot
-    if rf==ri:
-        ax1.plot(radius, convective_power, lw = 2, label=r'$r_f$ = {:.2f}'.format(rf), color='black')
+    if i==0:
+        ax1.plot(radius, convective_power, lw = 2, label=r'$R2$'.format(rf), color='black')
     else:
         ax1.plot(radius, convective_power, lw = 2, label=r'$r_f$ = {:.2f}'.format(rf))
     i+=1
 
 ax1.set_xlabel(r'$r_f$')
 ax1.set_ylabel(r'$\mathcal{P}$')
-plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
-ax1.legend(loc='lower right')
+ax1 = y_axis_sci(ax1)
+ax1.legend(loc='lower right', ncol=3)
 
 if saveOn == 1:
     if not os.path.exists('{}'.format(saveDir)):

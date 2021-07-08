@@ -7,12 +7,15 @@ Created on Fri Jan  8 16:23:22 2021
 """
 import numpy as np
 import chaosmagpy as cp
-import shtns
+import shtns 
 import h5py
 
 from scipy.integrate import trapz
-from paropy.coreproperties import icb_radius, cmb_radius
+from paropy.coreproperties import icb_radius, cmb_radius, earth_radius
 from paropy.data_utils import parodyload, list_Gt_files, list_St_files, surfaceload
+
+shell_gap = cmb_radius - icb_radius
+ro = cmb_radius/shell_gap
 
 def sim_time(data):
     '''Total simulation time (viscous) from diagnostic data'''
@@ -187,7 +190,6 @@ def convective_power_timeavg(run_ID, directory):
     n = len(Gt_file)
 
     # Loop over time
-    # Vr_avg, T_avg = [[] for _ in range(2)]
     I_avg = []
     i = 0
     for file in Gt_file:
@@ -214,6 +216,46 @@ def convective_power_timeavg(run_ID, directory):
         f.create_dataset('I', data=I_out)
 
     return radius, I_out
+
+def gauss_ratios_timeavg(run_ID, directory, l_trunc=14):
+    St_file = list_St_files(run_ID, directory)  # Find all St_no in folder
+    n = len(St_file)
+
+    # Loop over time
+    g10_avg, g20_avg, g30_avg, G2_avg, G3_avg = [[] for _ in range(5)]
+    i = 0
+    for file in St_file:
+        print('Loading {} ({}/{})'.format(file, i+1, n))
+        filename = '{}/{}'.format(directory, file)
+        (_, _, _, _, _, _, _,
+            _, _, _, _, _, _, _, _,
+            _, ntheta, nphi, _, _, theta, phi, _, _, Br,
+            _) = surfaceload(filename)
+        # Gauss coefficients
+        glm, _ = gauss_coeffs(Br, nphi, ntheta, l_trunc)
+        G2 = glm[2]/glm[1]
+        G3 = glm[3]/glm[1]
+        g10_avg.append(glm[1])
+        g20_avg.append(glm[2])
+        g30_avg.append(glm[3])
+        G2_avg.append(G2)
+        G3_avg.append(G3)
+        i += 1
+    # Time average (should really divide by dt but n is good enough)
+    g10_out = sum(g10_avg)/n
+    g20_out = sum(g20_avg)/n
+    g30_out = sum(g30_avg)/n
+    G2_out = sum(G2_avg)/n
+    G3_out = sum(G3_avg)/n
+    # Save
+    with h5py.File('{}/gauss_ratios_timeavg'.format(directory), 'a') as f:
+        f.create_dataset('g10', data=g10_out)
+        f.create_dataset('g20', data=g20_out)
+        f.create_dataset('g30', data=g30_out)
+        f.create_dataset('G2', data=G2_out)
+        f.create_dataset('G3', data=G3_out)
+    
+    return g10_out, g20_out, g30_avg, G2_out, G3_out
 
 def initialise_dV(nphi,ntheta,nr,phi,theta,r):
     '''
@@ -275,7 +317,87 @@ def filter_field(Br,nphi,ntheta,l_trunc):
     sh = shtns.sht(l_trunc, m_max) # by default 'flag = sht_quick_init' uses gaussian grid
     nlat, nlon = sh.set_grid(nphi=nphi, nlat=ntheta) # NOTE: array has to be dtype='float64' and not 'float32'
     vr = Br.T.astype('float64')
-    coeff = sh.analys(vr)  # spatial to spectral
-    Br_f = sh.synth(coeff)  # spectral to spatial
+    ylm = sh.analys(vr)  # spatial to spectral
+    Br_f = sh.synth(ylm)  # spectral to spatial
     return Br_f
 
+def power_spectrum(Br, nphi, ntheta, l_trunc, r=ro):
+    '''
+    Obtain power spectrum of core surface field to degree l_trunc (default at the CMB)
+    '''
+    # SH transform from spatial to spectral space
+    m_max = l_trunc 
+    # by default 'flag = sht_quick_init' uses gaussian grid
+    sh = shtns.sht(l_trunc, m_max)
+    nlat, nlon = sh.set_grid(nphi=nphi, nlat=ntheta)
+    vr = Br.T.astype('float64') # NOTE: array has to be dtype='float64' and not 'float32'
+    clm = sh.analys(vr)  # spatial to spectral
+    # Construct Gauss coefficients
+    glm = np.zeros(sh.nlm)
+    hlm = np.zeros(sh.nlm)
+    for l in range(l_trunc+1):
+        fac = 1/(l+1)  # cmb_radius/(l+1) # from Br potential to full potential
+        for m in range(l+1):
+            glm[sh.idx(l, m)] = fac*np.real(clm[sh.idx(l, m)])
+            hlm[sh.idx(l, m)] = fac*np.imag(clm[sh.idx(l, m)])
+    # Power spectrum
+    degrees = np.arange(1, l_trunc+1, 1)
+    spectrum = np.zeros(l_trunc+1)
+    for l in range(l_trunc+1):
+        fac = (l+1)*(earth_radius/cmb_radius)**(2*l+4) # TODO: check factors using time average
+        sum_m = 0
+        for m in range(l+1):
+            sum_m += glm[sh.idx(l,m)]**2+hlm[sh.idx(l, m)]**2
+        spectrum[l] = fac*sum_m
+    spectrum = spectrum[1:]  # ignore g00
+
+    return degrees, spectrum, clm, glm, hlm
+
+def gauss_coeffs(Br, nphi, ntheta, l_trunc):
+    '''
+    Obtain Gauss coefficients from core surface field
+    '''
+    # SH transform from spatial to spectral space
+    m_max = l_trunc 
+    # by default 'flag = sht_quick_init' uses gaussian grid
+    sh = shtns.sht(l_trunc, m_max)
+    nlat, nlon = sh.set_grid(nphi=nphi, nlat=ntheta)
+    vr = Br.T.astype('float64') # NOTE: array has to be dtype='float64' and not 'float32'
+    clm = sh.analys(vr)  # spatial to spectral
+    # Construct Gauss coefficients
+    glm = np.zeros(sh.nlm)
+    hlm = np.zeros(sh.nlm)
+    for l in range(l_trunc+1):
+        fac = 1/(l+1)  # cmb_radius/(l+1) # from Br potential to full potential
+        for m in range(l+1):
+            glm[sh.idx(l, m)] = fac*np.real(clm[sh.idx(l, m)])
+            hlm[sh.idx(l, m)] = fac*np.imag(clm[sh.idx(l, m)])
+
+    return glm, hlm
+
+def gauss_coeffs0(ylm, lmax):
+    '''
+    Construct Gauss coefficients glm & hlm from complex coefficients ylm
+    '''
+    k = 0
+    j = 0
+    m = 0
+    glm = np.zeros(int(lmax*(lmax+3)/2))
+    hlm = np.zeros(int(lmax*(lmax+3)/2))
+    for l in range(1, lmax+1):
+        for i in range(2*l+1):
+            if i == 0:
+                glm[j] = ylm[k]
+                hlm[j] = 0.0
+                j += 1
+                m += 1
+            else:
+                if np.mod(i, 2) == 1:
+                    glm[j] = ylm[k]
+                    j += 1
+                else:
+                    hlm[m] = ylm[k]
+                    m += 1
+            k += 1
+
+    return glm, hlm

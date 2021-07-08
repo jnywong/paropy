@@ -1,7 +1,7 @@
 '''
 filter_surface_field.py
 
-Use SHTns library to filter core surface magnetic field
+Truncate core surface magnetic field
 '''
 
 import os

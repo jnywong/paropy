@@ -23,8 +23,8 @@ dirName = '/data/geodynamo/wongj/Work' # path containing simulation output
 fig_aspect = 1  # figure aspect ratio
 
 saveOn = 1  # save figures?
-saveDir = '/home/wongj/Work/figures/rotation'  # path to save files
-# saveDir = '/Users/wongj/Documents/isterre/parody/figures/rotation'
+saveDir = '/home/wongj/Work/figures/differential_rotation'  # path to save files
+# saveDir = '/Users/wongj/Documents/isterre/parody/figures/differential_rotation'
 
 # %% LOAD
 w, h = plt.figaspect(fig_aspect)

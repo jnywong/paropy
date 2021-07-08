@@ -10,8 +10,19 @@ import numpy as np
 import scipy.special as sp
 import math
 from scipy.integrate import cumtrapz
+from matplotlib import ticker
 
 from paropy.coreproperties import icb_radius, cmb_radius
+
+def y_axis_sci(ax):
+    '''
+    Use scientific notation on the y-axis
+    '''
+    formatter = ticker.ScalarFormatter(useMathText=True)
+    formatter.set_scientific(True)
+    formatter.set_powerlimits((-1, 1))
+    ax.yaxis.set_major_formatter(formatter)
+    return ax
 
 def rad_to_deg(phi,theta):
     '''Converts radians into longitudinal and latitudinal degrees where -180 < phi_deg < 180 and -90 < theta_deg < 90 degrees'''

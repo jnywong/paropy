@@ -30,20 +30,22 @@ matplotlib.use('Agg') # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = 'c-200a' # PARODY simulation tag
+run_ID = 'ref_c' # PARODY simulation tag
 directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID) # path containing simulation output
 saveDir = '/home/wongj/Work/figures/diagnostics/' # path to save files
+
+l_trunc = 14 # SH degree truncation
 
 plotOn=1 # Plot and save
 
 #%% Load data
 kinetic_data=load_kinetic(run_ID,directory)
-magnetic_data=load_magnetic(run_ID,directory)
+# magnetic_data=load_magnetic(run_ID,directory)
 # nusselt_data=load_nusselt(run_ID,directory)
 # dipole_data=load_dipole(run_ID,directory)
 # power_data=load_power(run_ID,directory)
 # scales_data=load_scales(run_ID,directory)
-# spec_l_data=load_spec_l(run_ID,directory)
+spec_l_data=load_spec_l(run_ID,directory)
 # spec_m_data=load_spec_m(run_ID,directory)
 try:
     mantle_data=load_mantle(run_ID,directory)
@@ -58,34 +60,40 @@ except FileNotFoundError:
 # Output data
 print('run_ID: {}'.format(run_ID))
 time = sim_time(kinetic_data)
-print('Simulation time: {:.3f}'.format(time))
+print('Simulation time (viscous): {:.3f}'.format(time))
 (gamma,gamma_max)=grav_torque(mantle_data)
 print('Mean of gravitational torque on mantle: {:.2f} ({:.4e} of the maximum absolute value)'.format(
                 gamma, gamma/gamma_max))
 
 # Plot
 if plotOn==1:
-    ax1=kinetic_data.plot("time","ke_per_unit_vol")
-    kinetic_data.plot("time","poloidal_ke",ax=ax1)
-    kinetic_data.plot("time","toroidal_ke",ax=ax1)
+    ax1=spec_l_data.iloc[1:l_trunc+1].plot("sh_degree","timeavg_field", marker='o')
+    spec_l_data.iloc[1:l_trunc+1].plot("sh_degree", "instant_field", marker='o', ax=ax1)
+    # spec_l_data.plot("time","toroidal_ke",ax=ax1)
     fig1 = ax1.get_figure()
 
-    ax2=magnetic_data.plot("time","me_per_unit_vol")
-    magnetic_data.plot("time","poloidal_me",ax=ax2)
-    magnetic_data.plot("time","toroidal_me",ax=ax2)
-    fig2 = ax2.get_figure()
+    # ax1=kinetic_data.plot("time","ke_per_unit_vol")
+    # kinetic_data.plot("time","poloidal_ke",ax=ax1)
+    # kinetic_data.plot("time","toroidal_ke",ax=ax1)
+    # fig1 = ax1.get_figure()
 
-    ax3=mantle_data.plot("time","mantle_rotation_rate")
-    fig3 = ax3.get_figure()
+    # ax2=magnetic_data.plot("time","me_per_unit_vol")
+    # magnetic_data.plot("time","poloidal_me",ax=ax2)
+    # magnetic_data.plot("time","toroidal_me",ax=ax2)
+    # fig2 = ax2.get_figure()
 
-    ax4=mantle_data.plot("time","gravitational_torque_on_mantle")
-    fig4 = ax4.get_figure()
+    # ax3=mantle_data.plot("time","mantle_rotation_rate")
+    # fig3 = ax3.get_figure()
+
+    # ax4=mantle_data.plot("time","gravitational_torque_on_mantle")
+    # fig4 = ax4.get_figure()
 
     # Save 
     if not os.path.exists(saveDir+'{}'.format(run_ID)):
         os.makedirs(saveDir+'{}'.format(run_ID))
-    fig1.savefig(saveDir+'{}/kinetic.png'.format(run_ID))
-    fig2.savefig(saveDir+'{}/magnetic.png'.format(run_ID))
-    fig3.savefig(saveDir+'{}/mantle_rotation.png'.format(run_ID))
-    fig4.savefig(saveDir+'{}/mantle_grav_torque.png'.format(run_ID))
+    fig1.savefig(saveDir+'{}/spec_l.png'.format(run_ID))
+    # fig1.savefig(saveDir+'{}/kinetic.png'.format(run_ID))
+    # fig2.savefig(saveDir+'{}/magnetic.png'.format(run_ID))
+    # fig3.savefig(saveDir+'{}/mantle_rotation.png'.format(run_ID))
+    # fig4.savefig(saveDir+'{}/mantle_grav_torque.png'.format(run_ID))
     print('Figures saved in {}{}'.format(saveDir,run_ID))

@@ -76,8 +76,8 @@ def load_spec_l(run_ID,directory):
     data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
-    data.columns=["sh_degree","spectrum_instant_velocity","spectrum_instant_field", \
-                  "spectrum_time_avg_velocity", "spectrum_time_avg_field"]
+    data.columns=["sh_degree","instant_velocity","timeavg_velocity", \
+                  "instant_field", "timeavg_field"]
     return (data)
 
 def load_spec_m(run_ID,directory):
@@ -86,8 +86,8 @@ def load_spec_m(run_ID,directory):
     data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
     data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
     data=data.astype(dtype='float') # convert string to float
-    data.columns=["sh_order","spectrum_instant_velocity","spectrum_instant_field", \
-                  "spectrum_time_avg_velocity", "spectrum_time_avg_field"]
+    data.columns=["sh_order","instant_velocity","timeavg_velocity", \
+                  "instant_field", "timeavg_field"]
     return (data)
 
 def load_mantle(run_ID,directory):
