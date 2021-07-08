@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(name='paropy',
-      version='0.0.6', 
+      version='0.0.5', 
       description='Python package to process data from PARODY-JA4.3 dynamo simulations.',
       long_description=long_description,
       long_description_content_type="text/markdown",
