@@ -112,6 +112,16 @@ def load_innercore(run_ID,directory):
                   "gravity_torque_ic","total_angular_momentum_ic+oc+m"]
     return (data)
 
+def load_compliance(run_ID,directory):
+    '''Load compliance.run_ID diagnostic data'''
+    filename="compliance." + run_ID.lower()
+    data=pd.read_csv('{}/{}'.format(directory,filename),header=None,delim_whitespace=True)
+    data=data.replace({'D':'E'},regex=True) # replace Fortran float D to E notation
+    data=data.astype(dtype='float') # convert string to float
+    data.columns=["time","ADNAD", "OE", "ZNZ"]
+
+    return data
+
 #------------------------------------------------------------------------------
 # Graphics and surface data
 def fread(fid, nelements, dtype):

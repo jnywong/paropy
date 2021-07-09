@@ -19,8 +19,8 @@ from matplotlib import ticker
 from paropy.data_utils import load_kinetic, load_magnetic, load_dimensionless, load_mantle, load_power
 
 #%% Input parameters
-run_ID = ['chem_200d','d_0_55a','d_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
-# run_ID = ['c-200a']
+# run_ID = ['chem_200d','d_0_55a','d_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
+run_ID = ['chem_200d']
 # path containing simulation output
 dirName = '/data/geodynamo/wongj/Work'
 # directory = '/Volumes/NAS/ipgp/Work//'
@@ -28,7 +28,7 @@ dirName = '/data/geodynamo/wongj/Work'
 
 fig_aspect = 1  # figure aspect ratio
 
-saveOn = 1  # save figures?
+saveOn = 0  # save figures?
 saveDir = '/home/wongj/Work/figures/diagnostic_parameters'  # path to save files
 # saveDir = '/Users/wongj/Documents/isterre/parody/figures/surface'
 
@@ -48,6 +48,7 @@ fig3, ax3 = plt.subplots(1, 1, figsize=(1.5*w, h))
 i=0
 for run in run_ID:
     directory = '{}/{}'.format(dirName,run)
+    print('Loading {}'.format(directory))
     (_, Ek_out, Ra_out, Pr_out, Pm_out, fi_out, rf_out) = load_dimensionless(run,directory)
     kinetic_data = load_kinetic(run,directory)
     magnetic_data = load_magnetic(run, directory)
