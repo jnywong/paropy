@@ -12,24 +12,24 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 import h5py
-from numpy.lib.function_base import trapz
 
 from paropy.coreproperties import icb_radius, cmb_radius
 from paropy.data_utils import load_dimensionless, load_power
-from paropy.plot_utils import streamfunction, C_shift, merid_outline, y_axis_sci
-from paropy.routines import convective_power_timeavg, ref_codensity
+from paropy.plot_utils import y_axis_sci
+from paropy.routines import convective_power_timeavg
 
 # matplotlib.use('Agg')  # backend for no display
 plt.close('all')
 #%% INPUT PARAMETERS
 run_ID = ['chem_200d', 'd_0_55a', 'd_0_6a', 'd_0_65b',
           'c-200a', 'd_0_75a', 'd_0_8a']  # PARODY simulation tag
+# run_ID = ['d_0_55a']
 # path containing simulation output
 dirName = '/data/geodynamo/wongj/Work'
 
 fig_aspect = 1  # figure aspect ratio
 
-saveOn = 1  # save figures?
+saveOn = 0  # save figures?
 saveDir = '/home/wongj/Work/figures/convective_power'  # path to save files
 # saveDir = '/Users/wongj/Documents/isterre/parody/figures/convective_power'
 

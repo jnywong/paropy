@@ -25,7 +25,7 @@ matplotlib.use('Agg')  # backend for no display
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID, timestamp = 'c-200a', '16.84707134'
+run_ID, timestamp = 'ref_c', '6.900043502'
 directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output
 # directory = '/Volumes/NAS/ipgp/Work/{}/'.format(run_ID)
 # directory = '/Users/wongj/Desktop/data/{}'.format(run_ID)

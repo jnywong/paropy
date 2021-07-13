@@ -74,12 +74,12 @@ for run in run_ID:
     #%% Plot
     lon, lat = rad_to_deg(phi, theta)
     if rf == icb_radius/shell_gap:
-        h1, = ax1.plot(lat, Br, linewidth=1.5, label = r'R2', color = 'darkgrey')
+        h1 += ax1.plot(lat, Br, linewidth=1.5, label = r'R2', color = 'k')
         h2, = ax2.plot(rf, pm_lat_north, 'o', markersize=10,
-                   markerfacecolor='None', label='_nolegend_', color = 'darkgrey')
-        h3, = ax3.plot(rf, pm_lat_south, 's', markersize=10, markerfacecolor='None',label='_nolegend_', color = 'darkgrey')
+                   markerfacecolor='None', label='_nolegend_', color = 'k')
+        h3, = ax3.plot(rf, pm_lat_south, 's', markersize=10, markerfacecolor='None',label='_nolegend_', color = 'k')
     else:
-        h1, = ax1.plot(lat, Br, linewidth=2, label = r'$r_f = {:.2f}$'.format(rf))
+        h1 += ax1.plot(lat, Br, linewidth=2, label = r'$r_f = {:.2f}$'.format(rf))
         h2, = ax2.plot(rf, pm_lat_north, 'o', markersize=10,
                        markerfacecolor='None', label='_nolegend_')
         h3, = ax3.plot(rf, pm_lat_south, 's', color=h2.get_color(), markersize=10, markerfacecolor='None',label='_nolegend_')
@@ -89,13 +89,14 @@ nphi = phi.size
 ntheta = theta.size
 latC, lonC, BrC = CHAOS_phiavg_timeavg(nphi, ntheta, lmax, yearStart, yearEnd, n)
 BrC = BrC/(np.max(abs(BrC))) # Scale to simulation values
-h1 = ax1.plot(latC, BrC, linewidth=1.5, label = r'CHAOS-7.7', color = 'k')
+h1 += ax1.plot(latC, BrC, linewidth=1.5, label = r'CHAOS-7.7', color = 'tab:pink', linestyle=':')
 rf = icb_radius/shell_gap # no F-layer
 _, thetaC = deg_to_rad(lonC, latC)
 pm_lat_north, pm_lat_south = polar_minimum_latitude(thetaC, BrC)
 h2, = ax2.plot(rf, pm_lat_north, 'o', markersize=10,
-            markerfacecolor='None', label='_nolegend_', color = 'k')
-h3, = ax3.plot(rf, pm_lat_south, 's', markersize=10, markerfacecolor='None',label='_nolegend_', color = 'k')
+            markerfacecolor='None', label='_nolegend_', color = 'tab:pink', linestyle=':')
+h3, = ax3.plot(rf, pm_lat_south, 's', markersize=10, markerfacecolor='None',
+               label='_nolegend_', color='tab:pink', linestyle=':')
 
 # Scaling
 y_north = np.polyfit(strat_lat,pm_north,1)
@@ -113,10 +114,9 @@ ax1.set_xlim([-90,90])
 ax1.set_xlabel(r'latitude')
 ax1.set_ylabel(r'$\langle \overline{B_r} \rangle_\phi$')
 ax1.xaxis.set_ticks(np.arange(-90,91,30))
-lines = [h1[-1]]
-lines.extend(h1[0:-1])
+lines = h1[-1:] + h1[:-1]
 labels = [l.get_label() for l in lines]
-ax1.legend(lines, labels)
+ax1.legend(lines, labels, loc= 'upper right')
 
 ax2.set_xlabel(r'$r_f$')
 ax2.set_ylabel(r'$\langle \overline{\theta}^{NP}_{max} \rangle_\phi$')

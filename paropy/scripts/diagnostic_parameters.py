@@ -19,8 +19,8 @@ from matplotlib import ticker
 from paropy.data_utils import load_kinetic, load_magnetic, load_dimensionless, load_mantle, load_power
 
 #%% Input parameters
-# run_ID = ['chem_200d','d_0_55a','d_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
-run_ID = ['chem_200d']
+run_ID = ['chem_200d', 'ref_c', 'd_0_55a','d_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
+# run_ID = ['chem_200d']
 # path containing simulation output
 dirName = '/data/geodynamo/wongj/Work'
 # directory = '/Volumes/NAS/ipgp/Work//'
@@ -28,7 +28,7 @@ dirName = '/data/geodynamo/wongj/Work'
 
 fig_aspect = 1  # figure aspect ratio
 
-saveOn = 0  # save figures?
+saveOn = 1  # save figures?
 saveDir = '/home/wongj/Work/figures/diagnostic_parameters'  # path to save files
 # saveDir = '/Users/wongj/Documents/isterre/parody/figures/surface'
 
@@ -78,7 +78,10 @@ for run in run_ID:
     mantle_time = (mantle_time - mantle_time[0])/Pm_out # shift to start from zero and use magnetic diffusion time
     mantle_rotation = mantle_data.mantle_rotation_rate.to_numpy()
     if i==0:
-        ax3.plot(mantle_time,mantle_rotation,label=r'reference'.format(rf_out),color='darkgrey')
+        ax3.plot(mantle_time,mantle_rotation,label=r'R2', color='k')
+    elif i==1:
+        ax3.plot(mantle_time, mantle_rotation,
+                 label=r'R1', color='darkgrey')
     else:    
         ax3.plot(mantle_time,mantle_rotation,label=r'$r_f = ${:.2f}'.format(rf_out))
 
@@ -88,24 +91,28 @@ for run in run_ID:
 # Magnetic Reynolds and Elsasser number
 fig1, ax1a = plt.subplots(1, 1, figsize=(1.5*w,h))
 ax1b = ax1a.twinx()
-h1a = ax1a.plot(rf[0], Rm[0], 'o', ms=10, color='darkgrey', markerfacecolor = 'None', label=r'$Rm$')
-h1b = ax1b.plot(rf[0], El[0], 's', ms=10, color='darkgrey',
+h1a = ax1a.plot(rf[0], Rm[0], 'o', ms=10, color='k', markerfacecolor = 'None', label=r'$Rm$')
+h1b = ax1b.plot(rf[0], El[0], 's', ms=10, color='k',
                 markerfacecolor='None', label=r'$\Lambda$')
-h1a = ax1a.plot(rf[1:], Rm[1:], 'o', ms=10, color='tab:blue', label=r'$Rm$')
-h1b = ax1b.plot(rf[1:],El[1:],'s',ms=10,color='tab:orange',label=r'$\Lambda$')
+h1a = ax1a.plot(rf[1], Rm[1], 'o', ms=10, color='darkgrey', markerfacecolor = 'None', label=r'$Rm$')
+h1b = ax1b.plot(rf[1], El[1], 's', ms=10, color='darkgrey',
+                markerfacecolor='None', label=r'$\Lambda$')
+h1a = ax1a.plot(rf[2:], Rm[2:], 'o', ms=10, color='tab:blue', label=r'$Rm$')
+h1b = ax1b.plot(rf[2:], El[2:],'s',ms=10,color='tab:orange',label=r'$\Lambda$')
 ax1a.set_xlabel(r'$r_f$')
 ax1a.set_ylabel(r'$Rm$')
 ax1b.set_ylabel(r'$\Lambda$')
 ax1a.set_ylim([700, 1100])
-ax1b.set_ylim([16, 30])
+ax1b.set_ylim([14, 30])
 handles = h1a + h1b
 labs = [h.get_label() for h in handles]
 ax1b.legend(handles,labs)
 
 # Power density
 fig2, ax2 = plt.subplots(1, 1, figsize=(1.5*w, h))
-ax2.plot(rf[0],power_density[0],'o',ms=10,color='darkgrey',markerfacecolor = 'None')
-ax2.plot(rf[1:],power_density[1:],'o',ms=10,color='tab:green')
+ax2.plot(rf[0],power_density[0],'o',ms=10,color='k',markerfacecolor = 'None')
+ax2.plot(rf[1],power_density[1],'o',ms=10,color='darkgrey',markerfacecolor = 'None')
+ax2.plot(rf[2:],power_density[2:],'o',ms=10,color='tab:green')
 ax2.set_xlabel(r'$r_f$')
 ax2.set_ylabel(r'$\mathcal{P}$')
 formatter = ticker.ScalarFormatter(useMathText=True)
@@ -121,15 +128,16 @@ ax3.autoscale(enable=True, axis='x', tight=True)
 
 # Gravitatoinal torques
 fig4, ax4 = plt.subplots(1, 1, figsize=(1.5*w, h))
-ax4.plot(rf[0],avg_torques[0],'o',ms=10,color='darkgrey',markerfacecolor = 'None')
-ax4.plot(rf[1:],avg_torques[1:],'o',ms=10,color='tab:red')
+ax4.plot(rf[0],avg_torques[0],'o',ms=10,color='k',markerfacecolor = 'None')
+ax4.plot(rf[1],avg_torques[1],'o',ms=10,color='darkgrey',markerfacecolor = 'None')
+ax4.plot(rf[2:],avg_torques[2:],'o',ms=10,color='tab:red')
 ax4.set_xlabel(r'$r_f$')
 ax4.set_ylabel(r'$|\overline{\Gamma}/\Gamma_{max}|$')
 
 #%% Save
 if saveOn == 1:
-    if not os.path.exists(saveDir+'/diagnostic_parameters'):
-        os.makedirs(saveDir+'/diagnostic_parameters')
+    if not os.path.exists(saveDir):
+        os.makedirs(saveDir)
     fig1.savefig(saveDir+'/Rm_El.png', format='png',
                 dpi=200, bbox_inches='tight')
     fig1.savefig(saveDir+'/Rm_El.pdf', format='pdf',

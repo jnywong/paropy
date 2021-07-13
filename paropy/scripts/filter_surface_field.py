@@ -18,8 +18,8 @@ from paropy.routines import filter_field
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = ['chem_200d','c-200a']  # PARODY simulation tag
-timestamp = ['6.648476379', '16.84707134']
+run_ID = ['ref_c','c-200a']  # PARODY simulation tag
+timestamp = ['6.900043502', '16.84707134']  # ['6.648476379', '16.84707134']
 l_max = 133 # max. spherical harmonic degree from simulation
 l_trunc = 14 # SH degree truncation
 

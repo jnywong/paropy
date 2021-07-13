@@ -15,17 +15,13 @@ from paropy.data_utils import load_dipole, load_magnetic, load_dimensionless, lo
 #%% Input parameters
 run_ID = ['chem_200d', 'ref_c', 'd_0_55a', 'd_0_6a', 'd_0_65b',
           'c-200a', 'd_0_75a', 'd_0_8a']  # PARODY simulation tag
-# run_ID = ['chem_200d']
 # path containing simulation output
 dirName = '/data/geodynamo/wongj/Work'
-# directory = '/Volumes/NAS/ipgp/Work//'
-# directory = '/Users/wongj/Desktop/data/'
 
 fig_aspect = 1  # figure aspect ratio
 
 saveOn = 1  # save figures?
 saveDir = '/home/wongj/Work/figures/semblance'  # path to save files
-# saveDir = '/Users/wongj/Documents/isterre/parody/figures/semblance'
 
 #%% Pre-allocate
 rf = np.zeros(len(run_ID))
@@ -53,7 +49,7 @@ for run in run_ID:
 
 ax1.plot(rf[0], ADNAD[0], 'o', color='None', markeredgecolor="k", markersize=10)
 ax1.plot(rf[1], ADNAD[1], 'o', color='None', markeredgecolor="darkgrey", markersize=10)
-ax2.plot(rf[0], OE[0], 'o', color='None', markeredgecolor="tab:k", markersize=10)
+ax2.plot(rf[0], OE[0], 'o', color='None', markeredgecolor="k", markersize=10)
 ax2.plot(rf[1], OE[1], 'o', color='None', markeredgecolor="darkgrey", markersize=10)
 ax3.plot(rf[0], ZNZ[0], 'o', color='None', markeredgecolor="k", markersize=10)
 ax3.plot(rf[1], ZNZ[1], 'o', color='None', markeredgecolor="darkgrey", markersize=10)
