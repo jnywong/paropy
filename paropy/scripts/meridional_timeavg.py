@@ -79,8 +79,10 @@ cbar=plt.colorbar(c,ax=ax, aspect = 50, ticks=levels[::2])
 cbar.ax.set_title(r'$\mathbf{u}$')
 # streamfunction
 idx = np.argwhere(radius > rf)[0][0]
-Z = streamfunction(radius[idx:], theta, Vr[:,idx:], Vt[:,idx:])
-c = ax.contour(X[:,idx:],Y[:,idx:],Z, 9 , colors='grey', linewidths = lineWidth, alpha = 0.5)
+# Z = streamfunction(radius[idx:], theta, Vr[:,idx:], Vt[:,idx:])
+# c = ax.contour(X[:,idx:],Y[:,idx:],Z, 9 , colors='grey', linewidths = lineWidth, alpha = 0.5)
+Z = streamfunction(radius, theta, Vr, Vt)
+c = ax.contour(X,Y,Z, 9 , colors='grey', linewidths = lineWidth, alpha = 0.5)
 merid_outline(ax,radius)
 ax.axis('off')
 

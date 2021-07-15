@@ -106,9 +106,9 @@ p_south = np.poly1d(y_south)
 
 x = np.linspace(strat_lat[1],strat_lat[-1])
 h4 = ax2.plot(x, p_north(x), color='k',
-              label=r'$\langle \overline{{\theta}}^{{NP}}_{{max}} \rangle_\phi = {:.1f} + {:.1f} r_f$'.format(y_north[0], y_north[1]))
+              label=r'$\langle \overline{{\theta}}^{{NP}}_{{max}} \rangle_\phi = {:.1f} + {:.1f} r_f$'.format(y_north[1], y_north[0]))
 h5 = ax3.plot(x, p_south(x), color='k', linestyle='--',
-              label=r'$\langle \overline{{\theta}}^{{SP}}_{{max}} \rangle_\phi = {:.1f} + {:.1f} r_f$'.format(y_south[0], y_south[1]))
+              label=r'$\langle \overline{{\theta}}^{{SP}}_{{max}} \rangle_\phi = {:.1f} + {:.1f} r_f$'.format(y_south[1], y_south[0]))
 
 ax1.set_xlim([-90,90])
 ax1.set_xlabel(r'latitude')

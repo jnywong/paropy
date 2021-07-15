@@ -401,3 +401,48 @@ def gauss_coeffs0(ylm, lmax):
             k += 1
 
     return glm, hlm
+
+def fcf(run_ID, directory, l_trunc = 8):
+    '''
+    Flux concentration factor used in measure of semblance (Christensen et al. 2010). Note that we truncate at degree and order 8
+    '''
+    St_file = list_St_files(run_ID, directory)  # Find all St_no in folder
+    n = len(St_file)
+
+    # Loop over time
+    FCF_s = []
+    i = 0
+    for file in St_file:
+        print('Loading {} ({}/{})'.format(file, i+1, n))
+        filename = '{}/{}'.format(directory, file)
+
+        (_, _, _, _, _, _, _,
+         _, _, _, _, _, _, _, _,
+            _, ntheta, nphi, _, _, theta, phi, _, _, Br,
+            _) = surfaceload(filename)
+
+        # Truncate degree 8
+        m_max = l_trunc
+        sh = shtns.sht(l_trunc,m_max)
+        sh = shtns.sht(l_trunc, m_max)
+        nlat, nlon = sh.set_grid(nphi=nphi, nlat=ntheta)
+        # NOTE: array has to be dtype='float64' and not 'float32'
+        vr = Br.T.astype('float64')
+        clm = sh.analys(vr)  # spatial to spectral
+        Br_f = sh.synth(clm) # spectral to spatial
+        Br_4 = (Br_f**4).mean()
+        Br_2 = (Br_f**2).mean()
+        FCF = (Br_4 - Br_2**2)/Br_2**2
+
+        # Append
+        FCF_s.append(np.mean(FCF))
+        i += 1
+    # Time average (should really divide by dt but n is good enough)
+    FCF_out = sum(FCF_s)/n
+
+    # Save
+    with h5py.File('{}/fcf'.format(directory), 'w') as f:
+        f.create_dataset('FCF_out', data=FCF_out)
+    print('{}/fcf saved'.format(directory))
+
+    return FCF_out
