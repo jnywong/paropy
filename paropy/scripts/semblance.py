@@ -60,7 +60,7 @@ for run in run_ID:
 
     i += 1
 
-# Semblance
+# Semblance - rating parameters and errors from Christensen (2010)
 mu_ADNAD = 1.4
 mu_OE = 1
 mu_ZNZ = 0.15
@@ -76,15 +76,15 @@ chi_FCF = ((np.log(FCF)-np.log(mu_FCF))/np.log(sigma_FCF))**2
 chi = chi_ADNAD + chi_OE + chi_ZNZ + chi_FCF
 print('Semblance is {}'.format(chi))
 
-# Rating parameters from Christensen (2010) and errors from Gastine (2018) TODO: figure out logarithmic errors
-err1_neg = 0.7
-err1_pos = 2.9
-err2_neg = 0.5
-err2_pos = 2
-err3_neg = 0.07
-err3_pos = 0.38
-err4_neg = 0.8
-err4_pos = 2.6
+err1_neg = mu_ADNAD - np.log(sigma_ADNAD)
+err1_pos = mu_ADNAD + np.log(sigma_ADNAD)
+err2_neg = mu_OE - np.log(sigma_OE)
+err2_pos = mu_OE + np.log(sigma_OE)
+err3_neg = mu_ZNZ - np.log(sigma_ZNZ)
+err3_pos = mu_ZNZ + np.log(sigma_ZNZ)
+err4_neg = mu_FCF - np.log(sigma_FCF)
+err4_pos = mu_FCF + np.log(sigma_FCF)
+
 ax1.axhline(1.4,linestyle='--',color='k')
 ax2.axhline(1,linestyle='--',color='k')
 ax3.axhline(0.15, linestyle='--', color='k')
