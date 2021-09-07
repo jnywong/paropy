@@ -20,7 +20,6 @@ from paropy.data_utils import load_kinetic, load_magnetic, load_dimensionless, l
 
 #%% Input parameters
 run_ID = ['chem_200d', 'ref_c', 'd_0_55a','d_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
-# run_ID = ['chem_200d']
 # path containing simulation output
 dirName = '/data/geodynamo/wongj/Work'
 # directory = '/Volumes/NAS/ipgp/Work//'
@@ -30,7 +29,7 @@ fig_aspect = 1  # figure aspect ratio
 
 saveOn = 1  # save figures?
 saveDir = '/home/wongj/Work/figures/diagnostic_parameters'  # path to save files
-# saveDir = '/Users/wongj/Documents/isterre/parody/figures/surface'
+# saveDir = '/Users/wongj/Documents/isterre/parody/figures/diagnostic_parameters'
 
 #%% Pre-allocate
 rf = np.zeros(len(run_ID))

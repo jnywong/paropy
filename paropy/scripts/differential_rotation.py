@@ -19,7 +19,6 @@ run_ID = ['chem_200d', 'ref_c', 'd_0_55a', 'd_0_6a', 'd_0_65b',
           'c-200a', 'd_0_75a', 'd_0_8a']  # PARODY simulation tag
 dirName = '/data/geodynamo/wongj/Work' # path containing simulation output
 
-
 fig_aspect = 1  # figure aspect ratio
 
 saveOn = 1  # save figures?

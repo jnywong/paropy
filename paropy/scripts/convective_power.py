@@ -23,13 +23,12 @@ plt.close('all')
 #%% INPUT PARAMETERS
 run_ID = ['chem_200d', 'd_0_55a', 'd_0_6a', 'd_0_65b',
           'c-200a', 'd_0_75a', 'd_0_8a']  # PARODY simulation tag
-# run_ID = ['d_0_55a']
 # path containing simulation output
 dirName = '/data/geodynamo/wongj/Work'
 
 fig_aspect = 1  # figure aspect ratio
 
-saveOn = 0  # save figures?
+saveOn = 1  # save figures?
 saveDir = '/home/wongj/Work/figures/convective_power'  # path to save files
 # saveDir = '/Users/wongj/Documents/isterre/parody/figures/convective_power'
 

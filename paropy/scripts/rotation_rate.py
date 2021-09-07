@@ -15,15 +15,16 @@ from paropy.data_utils import load_dimensionless, load_mantle, load_innercore
 # matplotlib.use('Agg')  # backend for no display
 plt.close('all')
 #%% INPUT PARAMETERS
+# run_ID = ['chem_200d', 'ref_c', 'd_0_55a', 'd_0_6a', 'd_0_65b',
+#           'c-200a', 'd_0_75a', 'd_0_8a']  # PARODY simulation tag
 run_ID = ['chem_200d', 'ref_c', 'd_0_55a', 'd_0_6a', 'd_0_65b',
           'c-200a', 'd_0_75a', 'd_0_8a']  # PARODY simulation tag
 dirName = '/data/geodynamo/wongj/Work'  # path containing simulation output
 
-
 fig_aspect = 1  # figure aspect ratio
 
 saveOn = 1  # save figures?
-saveDir = '/home/wongj/Work/figures/rotation_rate'  # path to save files
+saveDir = '/home/wongj/Work/figures/rotation_rate_magnetz'  # path to save files
 # saveDir = '/Users/wongj/Documents/isterre/parody/figures/rotation_rate'
 
 # %% LOAD
