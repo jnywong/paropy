@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 from cycler import cycler
 import h5py
 
+# plt.style.use('dark_background')
+
 from paropy.coreproperties import icb_radius, cmb_radius
 from paropy.data_utils import load_dimensionless
 from paropy.routines import surface_phiavg_timeavg
@@ -20,7 +22,7 @@ from paropy.plot_utils import rad_to_deg, tangent_cylinder_latitude, polar_minim
 
 #%% Input parameters
 # run_ID = ['c-200a']
-run_ID = ['chem_200d','d_0_55a','d_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
+run_ID = ['chem_200d','d_0_55a', 'd_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
 # path containing simulation output
 dirName = '/data/geodynamo/wongj/Work'
 # directory = '/Volumes/NAS/ipgp/Work/'
@@ -29,7 +31,7 @@ dirName = '/data/geodynamo/wongj/Work'
 fig_aspect = 1  # figure aspect ratio
 
 saveOn = 1  # save figures?
-saveDir = '/home/wongj/Work/figures/latitude_vs_Br' # path to save files
+saveDir = '/home/wongj/Work/figures/latitude_vs_Br_dark' # path to save files
 # saveDir = '/Users/wongj/Documents/isterre/parody/figures/surface'
 
 #%% Load
@@ -92,6 +94,7 @@ h5 = ax3.plot(x, p_south(x), color='k', linestyle='--',
 
 ax1.set_xlim([-90,90])
 ax1.set_xlabel(r'latitude')
+ax1.set_ylim([-1.1,1.1])
 ax1.set_ylabel(r'$\langle \overline{B_r} \rangle_\phi$')
 ax1.xaxis.set_ticks(np.arange(-90,91,30))
 ax1.legend()
@@ -112,7 +115,7 @@ ax3.legend(handles,labs)
 if saveOn == 1:
     if not os.path.exists('{}'.format(saveDir)):
         os.makedirs('{}'.format(saveDir))
-    fig1.savefig('{}/latitude_vs_Br.png'.format(saveDir),
+    fig1.savefig('{}/latitude_vs_Br_6.png'.format(saveDir),
                 format='png', dpi=200, bbox_inches='tight')
     fig1.savefig('{}/latitude_vs_Br.pdf'.format(saveDir),
                 format='pdf', dpi=200, bbox_inches='tight')

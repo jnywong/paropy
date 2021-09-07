@@ -2,6 +2,8 @@
 power_spectrum.py
 
 Compare power spectra of different runs
+
+NOTE: Instructions from JA are wrong! spec_l.runid: column 1=SH degree, column 2,3=instant,average l spectrum for V, column 4,5=instant,average l spectrum for B
 '''
 
 import os
@@ -16,8 +18,8 @@ plt.close('all')
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-run_ID = ['chem_200d','ref_c', 'd_0_55a','d_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
-# run_ID = ['chem_200d']
+# run_ID = ['chem_200d','ref_c', 'd_0_55a','d_0_6a','d_0_65b','c-200a','d_0_75a','d_0_8a']  # PARODY simulation tag
+run_ID = ['ref_c','c-200a']
 l_trunc = 14  # SH degree truncation
 
 fig_aspect = 1  # figure aspect ratio
@@ -46,7 +48,6 @@ for run in run_ID:
         ax1.plot(spec_l[1:15,0], spec_l[1:15,4], marker='o', markersize=10)
     i+=1
 
-
 ax1.set_xticks(np.arange(1,l_trunc+1,1))
 
 ax1.legend(run_ID)
@@ -56,5 +57,5 @@ plt.tight_layout()
 if saveOn==1:
     if not os.path.exists(saveDir):
         os.makedirs(saveDir)
-    fig1.savefig(saveDir+'/compare_timeavg_spec_l.png')
+    fig1.savefig(saveDir+'/compare_timeavg_spec_l_1.png')
     print('Figures saved in {}/compare_timeavg_spec_l.png'.format(saveDir))
