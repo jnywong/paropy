@@ -121,7 +121,6 @@ def surface_timeavg(run_ID, directory):
 
     return (theta, phi, Vt_out, Vp_out, Br_out, dtBr_out)
 
-
 def surface_phiavg_timeavg(run_ID, directory):
     '''
     Time average phi averaged surface fields

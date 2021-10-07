@@ -130,7 +130,7 @@ saveDir = <path_to_savefigs>
 
 ## Authors
 
-* [**Jenny Wong**](https://jnywong.github.io/) - *Institut de Physique du Globe de Paris - Institut des Sciences de la Terre*
+* [**Jenny Wong**](https://jnywong.netlify.app/) - *Institut de Physique du Globe de Paris - Institut des Sciences de la Terre*
 
 ## License
 
