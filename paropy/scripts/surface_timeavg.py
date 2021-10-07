@@ -27,11 +27,11 @@ from paropy.routines import surface_timeavg
 #%%--------------------------------------------------------------------------%%
 # INPUT PARAMETERS
 #----------------------------------------------------------------------------%%
-# run_ID  = 'ref_c' # PARODY simulation tag
+run_ID  = 'ref_c' # PARODY simulation tag
 # run_ID = 'd_0_55a'
 # run_ID = 'd_0_6a'
 # run_ID = 'd_0_65a'
-run_ID = 'c-200a'
+# run_ID = 'c-200a'
 # run_ID = 'd_0_75a'
 # run_ID = 'd_0_8a'
 directory = '/data/geodynamo/wongj/Work/{}'.format(run_ID) # path containing simulation output

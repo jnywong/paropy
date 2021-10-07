@@ -29,9 +29,10 @@ matplotlib.use('Agg')  # backend for no display
 #----------------------------------------------------------------------------%%
 # run_ID, timestamp = 'ref_c', '6.846397324'
 # run_ID, timestamp = 'd_0_55a', '20.28436204'
+run_ID, timestamp = 'd_0_55b', '0.002091547'
 # run_ID, timestamp = 'd_0_6a', '21.49797360'
 # run_ID, timestamp = 'd_0_65a', '18.16950357'
-run_ID, timestamp = 'c-200a', '16.84707134'
+# run_ID, timestamp = 'c-200a', '16.84707134'
 # run_ID, timestamp = 'd_0_75a', '21.43895335'
 # run_ID, timestamp = 'd_0_8a', '21.17830229'
 directory = '/data/geodynamo/wongj/Work/{}/'.format(run_ID)  # path containing runs

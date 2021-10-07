@@ -256,6 +256,38 @@ def gauss_ratios_timeavg(run_ID, directory, l_trunc=14):
     
     return g10_out, g20_out, g30_avg, G2_out, G3_out
 
+def ur_avg(run_ID, directory, rf):
+    '''
+    Time series of theta and phi averaged radial velocity in the F-layer
+    '''
+    Gt_file = list_Gt_files(run_ID, directory)  # Find all Gt_no in folder
+    n = len(Gt_file)
+
+    # Loop over time
+    ur_avg = []
+    i = 0
+    for file in Gt_file:
+        print('Loading {} ({}/{})'.format(file, i+1, n))
+        filename = '{}/{}'.format(directory, file)
+        (_, _, _, _, _, _, _,
+            _, _, _, _, _, _, _, _,
+            nr, ntheta, nphi, _, radius, theta, phi, Vr, _, _,
+            _, _, _, T) = parodyload(filename)
+        # Phi and theta average
+        ur = Vr.mean(axis=0).mean(axis=0)
+        # Truncate to F-layer
+        if i == 0:
+            idx = np.argwhere(radius < rf)[-1][0]
+        ur = ur[:idx]
+        # Average ur in F-layer
+        ur_avg.append(ur.mean())
+        i += 1
+    # Save
+    with h5py.File('{}/flayer_ur'.format(directory), 'a') as f:
+        f.create_dataset('ur', data=ur_avg)
+
+    return ur_avg
+
 def initialise_dV(nphi,ntheta,nr,phi,theta,r):
     '''
     Prepare grid for integration in spherical coordinates

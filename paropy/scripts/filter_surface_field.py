@@ -78,7 +78,6 @@ for run in run_ID:
     cbar.ax.tick_params(length=5)
     i+=1
 
-
 if saveOn == 1:
     if not os.path.exists('{}/{}'.format(saveDir, run_ID)):
         os.makedirs('{}/{}'.format(saveDir, run_ID))
